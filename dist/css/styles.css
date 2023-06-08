@@ -1,3 +1,6 @@
+body {
+  font-family: 'Geologica', sans-serif; }
+
 .navbar {
   max-height: 60px; }
   .navbar .nav-link {
@@ -12,9 +15,6 @@
     background-color: #ffffff;
     width: 200px;
     height: 200px; }
-
-body {
-  font-family: 'Geologica', sans-serif; }
 
 footer {
   text-align: center; }

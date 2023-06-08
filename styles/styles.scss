@@ -1,5 +1,9 @@
 @import 'variables';
 
+body {
+    font-family: 'Geologica', sans-serif;
+}
+
 .navbar {
     max-height: 60px;
     .nav-link {
@@ -18,10 +22,6 @@
         width: 200px;
         height: 200px;
     }
-}
-
-body {
-    font-family: 'Geologica', sans-serif;
 }
 
 footer {
