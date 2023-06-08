@@ -1,1 +1,8 @@
-node_modules
+/node_modules/
+/.idea/.gitignore
+/.idea/aws.xml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/vcs.xml
+/.idea/vpere.github.io.iml
+/.idea/

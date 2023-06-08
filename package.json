@@ -1,11 +1,15 @@
 {
   "dependencies": {
-    "bootstrap": "^5.3.0"
+    "bootstrap": "^5.3.0",
+    "i18next": "^22.5.1",
+    "i18next-xhr-backend": "^3.2.2"
   },
   "devDependencies": {
+    "css-loader": "^6.8.1",
     "node-sass": "^9.0.0"
   },
-  "scripts" : {
-    "compile-scss": "node-sass styles/styles.scss -o dist/css"
+  "scripts": {
+    "compile-scss": "node-sass styles/styles.scss -o dist/css",
+    "start": "npm run compile-scss && webpack-dev-server --mode development --open"
   }
 }
