@@ -1,0 +1,20 @@
+.navbar {
+  max-height: 60px; }
+  .navbar .nav-link {
+    color: #ffffff; }
+    .navbar .nav-link:hover {
+      color: #ff7f50; }
+
+.introduction {
+  background-color: #ff7f50;
+  padding: 50px; }
+  .introduction .avatar-container {
+    background-color: #ffffff;
+    width: 200px;
+    height: 200px; }
+
+body {
+  font-family: 'Geologica', sans-serif; }
+
+footer {
+  text-align: center; }

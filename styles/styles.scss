@@ -1,0 +1,29 @@
+@import 'variables';
+
+.navbar {
+    max-height: 60px;
+    .nav-link {
+        color: $secondary-color;
+        &:hover {
+            color: $accent-color;
+        }
+    }
+}
+
+.introduction {
+    background-color: $accent-color;
+    padding: 50px;
+    .avatar-container {
+        background-color: $secondary-color;
+        width: 200px;
+        height: 200px;
+    }
+}
+
+body {
+    font-family: 'Geologica', sans-serif;
+}
+
+footer {
+    text-align: center;
+}
