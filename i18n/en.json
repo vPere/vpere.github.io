@@ -2,5 +2,8 @@
   "nav.about": "About me",
   "nav.projects": "Recent projects",
   "nav.contact": "Contact me",
-  "nav.languages": "Languages"
+  "nav.languages": "Languages",
+  "section.projects.content1": "*projecte recent 1*",
+  "section.projects.content2": "*projecte recent 2*",
+  "section.projects.content3": "*projecte recent 3*"
 }

@@ -2,28 +2,46 @@
 
 body {
     font-family: 'Geologica', sans-serif;
-}
+    .navbar {
+        max-height: 60px;
+        background-color: $background-color;
+        .nav-link {
+            color: $primary-color;
+            &:hover {
+                color: $accent-color;
+            }
+        }
+    }
 
-.navbar {
-    max-height: 60px;
-    .nav-link {
-        color: $secondary-color;
-        &:hover {
-            color: $accent-color;
+    .introduction {
+        background-color: $secondary-color;
+        padding: 50px;
+        .avatar-container {
+            background-color: #FFFFFF;
+            width: 200px;
+            height: 200px;
+        }
+    }
+
+    .section {
+        padding: 50px !important;
+        background-color: $background-color;
+        .section-title {
+            color: $primary-color;
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: justify;
+        }
+        .section-content {
+            padding-top: 30px;
+            text-align: justify;
+            color: $text-color;
         }
     }
 }
-
-.introduction {
-    background-color: $accent-color;
-    padding: 50px;
-    .avatar-container {
-        background-color: $secondary-color;
-        width: 200px;
-        height: 200px;
-    }
-}
-
 footer {
+    padding: 10px 0 0 0;
+    background-color: $neutral-color;
+    color: $text-color;
     text-align: center;
 }
