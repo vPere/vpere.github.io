@@ -32,13 +32,20 @@ body {
       font-size: 2rem;
       font-weight: bold;
       text-align: justify; }
-    body .section .section-content {
-      padding-top: 30px;
-      text-align: justify;
-      color: #333333; }
+    body .section .section-items .section-item {
+      margin: 10px; }
+      body .section .section-items .section-item .job-title {
+        color: #7173f1;
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-align: justify; }
 
 footer {
-  padding: 10px 0 0 0;
+  position: static;
+  padding: 15px;
+  left: 0;
+  bottom: 0;
+  width: 100%;
   background-color: #ACBCFF;
   color: #333333;
   text-align: center; }

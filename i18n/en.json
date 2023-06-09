@@ -1,9 +1,13 @@
 {
   "nav.about": "About me",
-  "nav.projects": "Projects",
+  "nav.experience": "Experience",
   "nav.contact": "Contact me",
   "nav.languages": "Languages",
-  "section.projects.content1": "*projecte recent 1*",
-  "section.projects.content2": "*projecte recent 2*",
-  "section.projects.content3": "*projecte recent 3*"
+  "section.about.content": "My name is Pere and I'm a computer engineer. I enjoy programming, designing, and learning new things. Currently, I'm working as a web developer in Barcelona.",
+  "section.about.content2": "I have experience in web development, mainly in frontend, using AngularJS, Typescript, Node, and Bootstrap. I have also worked with Java, Spring, and Python.",
+  "section.experience.title": "Experience",
+  "section.exp.volunteering.monitor": "Children and Youth Free Time Activities Monitor",
+  "nav.lng.en": "English",
+  "nav.lng.ca": "Catalan",
+  "nav.lng.es": "Spanish"
 }

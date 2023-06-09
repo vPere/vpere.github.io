@@ -9,7 +9,8 @@
     "node-sass": "^9.0.0"
   },
   "scripts": {
-    "compile-scss": "node-sass styles/styles.scss -o dist/css",
+    "compile-scss": "npm run compile-animated-scss && node-sass styles/styles.scss -o dist/css",
+    "compile-animated-scss": "node-sass styles/animation.scss -o dist/css",
     "start": "npm run compile-scss && webpack-dev-server --mode development --open"
   }
 }

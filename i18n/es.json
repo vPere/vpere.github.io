@@ -1,9 +1,13 @@
 {
-  "nav.about": "Sobre mi",
-  "nav.projects": "Proyectos",
-  "nav.contact": "Contacto",
+  "nav.about": "Sobre mí",
+  "nav.experience": "Experiencia",
+  "nav.contact": "Cont\u00E1ctame",
   "nav.languages": "Idiomas",
-  "section.projects.content1": "*projecte recent 1*",
-  "section.projects.content2": "*projecte recent 2*",
-  "section.projects.content3": "*projecte recent 3*"
+  "section.about.content": "Me llamo Pere y soy ingeniero inform\u00E1tico. Me gusta programar, dise\u00F1ar y aprender cosas nuevas. Actualmente estoy trabajando como desarrollador web en Barcelona.",
+  "section.about.content2": "Tengo experiencia en desarrollo web principalmente en el frontend, utilizando AngularJS, Typescript, Node y Bootstrap. Tambi\u00E9n he trabajado con Java, Spring y Python.",
+  "section.experience.title": "Experiencia",
+  "section.exp.volunteering.monitor": "Monitor de tiempo libre",
+  "nav.lng.en": "Ingl\u00E9s",
+  "nav.lng.ca": "Catal\u00E1n",
+  "nav.lng.es": "Espa\u00F1ol"
 }

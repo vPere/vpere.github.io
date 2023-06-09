@@ -48,15 +48,25 @@ body {
             font-weight: bold;
             text-align: justify;
         }
-        .section-content {
-            padding-top: 30px;
-            text-align: justify;
-            color: $text-color;
+        .section-items {
+            .section-item {
+                margin: 10px;
+                .job-title {
+                    color: $primary-color;
+                    font-size: 1.5rem;
+                    font-weight: bold;
+                    text-align: justify;
+                }
+            }
         }
     }
 }
 footer {
-    padding: 10px 0 0 0;
+    position: static;
+    padding: 15px;
+    left: 0;
+    bottom: 0;
+    width: 100%;
     background-color: $neutral-color;
     color: $text-color;
     text-align: center;
