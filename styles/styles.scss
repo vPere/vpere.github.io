@@ -2,14 +2,30 @@
 
 body {
     font-family: 'Geologica', sans-serif;
+
     .navbar {
         max-height: 60px;
         background-color: $background-color;
-        .nav-link {
+        .navbar-toggler {
+            border: $background-color;
             color: $primary-color;
-            &:hover {
-                color: $accent-color;
+            .navbar-toggler-icon {
+                color: $primary-color;
             }
+        }
+        .navbar-collapse {
+            background-color: $background-color;
+            padding-left: 10px;
+            .navbar-nav {
+                border: $neutral-color;
+            }
+        }
+    }
+
+    .nav-link {
+        color: $primary-color;
+        &:hover {
+            color: $accent-color;
         }
     }
 

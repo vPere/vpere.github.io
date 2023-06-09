@@ -3,10 +3,20 @@ body {
   body .navbar {
     max-height: 60px;
     background-color: #FFFFFF; }
-    body .navbar .nav-link {
+    body .navbar .navbar-toggler {
+      border: #FFFFFF;
       color: #7173f1; }
-      body .navbar .nav-link:hover {
-        color: #FFB479; }
+      body .navbar .navbar-toggler .navbar-toggler-icon {
+        color: #7173f1; }
+    body .navbar .navbar-collapse {
+      background-color: #FFFFFF;
+      padding-left: 10px; }
+      body .navbar .navbar-collapse .navbar-nav {
+        border: #ACBCFF; }
+  body .nav-link {
+    color: #7173f1; }
+    body .nav-link:hover {
+      color: #FFB479; }
   body .introduction {
     background-color: #ACBCFF;
     padding: 50px; }
