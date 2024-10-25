@@ -2,6 +2,7 @@
   "nav.about": "About me",
   "nav.experience": "Experience",
   "nav.contact": "Contact me",
+  "nav.photo": "Photography",
   "nav.languages": "Languages",
   "section.about.content": "My name is Pere and I'm a computer engineer. I enjoy programming, designing, and learning new things. Currently, I'm working as a web developer in Barcelona.",
   "section.about.content2": "I have experience in web development, mainly in frontend, using AngularJS, Typescript, Node, and Bootstrap. I have also worked with Java, Spring, and Python.",
