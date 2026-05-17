@@ -60,7 +60,7 @@ body {
             }
         }
     }
-
+}
     /* --- Instagram Grid --- */
 .ig-header {
   display: flex;
@@ -118,8 +118,6 @@ body {
   .ig-card--featured {
     grid-row: span 1;
   }
-}
-
 }
 footer {
     position: static;
