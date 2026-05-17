@@ -159,6 +159,7 @@ body {
   justify-content: center;
   align-items: center;
 }
+
 .avatar-container {
   width: 160px;
   height: 160px;
@@ -314,9 +315,9 @@ footer a:hover { opacity: 0.7; }
 
 /* --- Intro circle-in animation ---------------------------- */
 @keyframes circle-in-hesitate {
-  0%   { clip-path: circle(0%   at 50% 50%); }
-  40%  { clip-path: circle(40%  at 50% 50%); }
-  100% { clip-path: circle(125% at 50% 50%); }
+  0%   { clip-path: circle(0%);   }
+  40%  { clip-path: circle(40%);  }
+  100% { clip-path: circle(125%); }
 }
 
 [transition-style="in:circle:hesitate"] {
