@@ -5,7 +5,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/i18next-http-backend@1.4.5/i18nextHttpBackend.min.js"></script>
     <link rel="stylesheet" href="./dist/css/styles.css">
     <link rel="stylesheet" href="./dist/css/animation.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -103,45 +103,33 @@
     </div>
     <div class="section" id="photo">
         <div class="container">
-            <h2 class="section-title text-center mb-4" data-i18n="section.photo.title">Photo Gallery</h2>
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-                <!-- Instagram Post 1 -->
-                <div class="col">
-                    <blockquote class="instagram-media"
-                                data-instgrm-permalink="https://www.instagram.com/p/B3SbK3bn06b/?utm_source=ig_embed&amp;utm_campaign=loading"
-                                data-instgrm-version="14"
-                                data-instgrm-captioned
-                                style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 10px; max-width:540px; min-width:326px; padding:0; width:100%; height: 273px;">
-                    </blockquote>
-                </div>
-                <!-- Instagram Post 2 -->
-                <div class="col">
-                    <blockquote class="instagram-media"
-                                data-instgrm-permalink="https://www.instagram.com/p/C46YzJvNVmh/?utm_source=ig_embed&amp;utm_campaign=loading"
-                                data-instgrm-version="14"
-                                data-instgrm-captioned
-                                style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 10px; max-width:540px; min-width:326px; padding:0; width:100%; height: 273px;">
-                    </blockquote>
-                </div>
-                <!-- Instagram Post 3 -->
-                <div class="col">
-                    <blockquote class="instagram-media"
-                                data-instgrm-permalink="https://www.instagram.com/p/C_fjLEEtt_c/?utm_source=ig_embed&amp;utm_campaign=loading"
-                                data-instgrm-version="14"
-                                data-instgrm-captioned
-                                style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 10px; max-width:540px; min-width:326px; padding:0; width:100%; height: 273px;">
-                    </blockquote>
-                </div>
-                <!-- Instagram Post 4 -->
-                <div class="col">
-                    <blockquote class="instagram-media"
-                                data-instgrm-permalink="https://www.instagram.com/p/C4wHfvPtn35/?utm_source=ig_embed&amp;utm_campaign=loading"
-                                data-instgrm-version="14"
-                                data-instgrm-captioned
-                                style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 10px; max-width:540px; min-width:326px; padding:0; width:100%; height: 273px;">
-                    </blockquote>
-                </div>
+          <div class="ig-header">
+            <div class="ig-header-line"></div>
+            <h2 class="section-title" data-i18n="section.photo.title">Photo Gallery</h2>
+            <div class="ig-header-line"></div>
+          </div>
+          <div class="ig-grid">
+            <!-- Featured post (spans 2 rows on the left) -->
+            <div class="ig-card ig-card--featured">
+              <blockquote class="instagram-media"
+                data-instgrm-permalink="https://www.instagram.com/p/B3SbK3bn06b/?utm_source=ig_embed&amp;utm_campaign=loading"
+                data-instgrm-version="14">
+              </blockquote>
             </div>
+            <!-- Smaller posts stacked on the right -->
+            <div class="ig-card">
+              <blockquote class="instagram-media"
+                data-instgrm-permalink="https://www.instagram.com/p/C46YzJvNVmh/?utm_source=ig_embed&amp;utm_campaign=loading"
+                data-instgrm-version="14">
+              </blockquote>
+            </div>
+            <div class="ig-card">
+              <blockquote class="instagram-media"
+                data-instgrm-permalink="https://www.instagram.com/p/C_fjLEEtt_c/?utm_source=ig_embed&amp;utm_campaign=loading"
+                data-instgrm-version="14">
+              </blockquote>
+            </div>
+          </div>
         </div>
     </div>
     <footer>

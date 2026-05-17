@@ -1,5 +1,5 @@
 function loadLocale(locale) {
-    i18next.use(i18nextXHRBackend).init({
+    i18next.use(i18nextHttpBackend).init({
         lng: locale,
         fallbackLng: 'ca',
         backend: {
