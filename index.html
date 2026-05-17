@@ -7,10 +7,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles/styles.css">
+  <link rel="stylesheet" href="./dist/css/styles.css">
 </head>
 <body>
-
+ 
   <!-- ── Navbar ────────────────────────────────────────────── -->
   <nav class="navbar">
     <button class="navbar-toggler" id="navToggle" aria-label="Toggle navigation">☰</button>
@@ -27,7 +27,7 @@
       </div>
     </div>
   </nav>
-
+ 
   <!-- Mobile nav drawer -->
   <div class="mobile-nav" id="mobileNav">
     <a class="nav-link" href="#experience" data-i18n="nav.experience"></a>
@@ -41,14 +41,14 @@
       </div>
     </div>
   </div>
-
+ 
   <!-- ── Introduction ──────────────────────────────────────── -->
-  <div class="introduction">
+  <div class="introduction" transition-style="in:circle:hesitate">
     <div class="avatar-container">
       <img src="assets/vpere.jpg" alt="Avatar" width="160" height="160">
     </div>
   </div>
-
+ 
   <!-- ── Experience ────────────────────────────────────────── -->
   <div class="section" id="experience">
     <div class="section-container">
@@ -56,14 +56,23 @@
       <div class="section-items">
 
         <div class="section-item">
+          <h3 class="job-title"   data-i18n="section.exp.master">Master in Cybersecurity</h3>
+          <p  class="job-duration" data-i18n="section.exp.master.duration">08/2024 – 06/2025</p>
+          <h4 class="company-name">Högskolan Väst - Trollhättan</h4>
+          <ul class="job-responsibilities">
+            <li data-i18n="section.exp.master.desc1"></li>
+          </ul>
+        </div>
+ 
+        <div class="section-item">
           <h3 class="job-title"   data-i18n="section.exp.frontend"></h3>
-          <p  class="job-duration" data-i18n="section.exp.frontend.duration">01/2022 – Present</p>
+          <p  class="job-duration" data-i18n="section.exp.frontend.duration">01/2022 – 05/2024</p>
           <h4 class="company-name">Tictap · vcards · Tapinpack</h4>
           <ul class="job-responsibilities">
             <li data-i18n="section.exp.frontend.desc1"></li>
           </ul>
         </div>
-
+ 
         <div class="section-item">
           <h3 class="job-title"   data-i18n="section.exp.bachelor">Bachelor's Degree in Computer Engineering</h3>
           <p  class="job-duration" data-i18n="section.exp.bachelor.duration"></p>
@@ -72,7 +81,7 @@
             <li data-i18n="section.exp.bachelor.desc1"></li>
           </ul>
         </div>
-
+ 
         <div class="section-item">
           <h3 class="job-title"   data-i18n="section.exp.volunteering.monitor"></h3>
           <p  class="job-duration" data-i18n="section.exp.volunteering.monitor.duration">2018 – Present</p>
@@ -81,7 +90,7 @@
             <li data-i18n="section.exp.volunteering.monitor.desc1"></li>
           </ul>
         </div>
-
+ 
       </div>
     </div>
   </div>
@@ -94,7 +103,7 @@
 
         <div class="ig-card ig-card--featured">
           <blockquote class="instagram-media"
-            data-instgrm-permalink="https://www.instagram.com/p/B3SbK3bn06b/?utm_source=ig_embed&amp;utm_campaign=loading"
+            data-instgrm-permalink="https://www.instagram.com/p/DXZOzzpirJq/?utm_source=ig_embed&amp;utm_campaign=loading"
             data-instgrm-version="14"
             style="background:#111;border:0;margin:0;padding:0;width:100%;">
           </blockquote>
@@ -102,7 +111,7 @@
 
         <div class="ig-card">
           <blockquote class="instagram-media"
-            data-instgrm-permalink="https://www.instagram.com/p/C46YzJvNVmh/?utm_source=ig_embed&amp;utm_campaign=loading"
+            data-instgrm-permalink="https://www.instagram.com/p/DSAT5omjFdy/?utm_source=ig_embed&amp;utm_campaign=loading"
             data-instgrm-version="14"
             style="background:#111;border:0;margin:0;padding:0;width:100%;">
           </blockquote>
@@ -110,33 +119,40 @@
 
         <div class="ig-card">
           <blockquote class="instagram-media"
-            data-instgrm-permalink="https://www.instagram.com/p/C_fjLEEtt_c/?utm_source=ig_embed&amp;utm_campaign=loading"
+            data-instgrm-permalink="https://www.instagram.com/p/DW3ruiNCvZD/?utm_source=ig_embed&amp;utm_campaign=loading"
             data-instgrm-version="14"
             style="background:#111;border:0;margin:0;padding:0;width:100%;">
           </blockquote>
         </div>
-
+        
+        <div class="ig-card">
+          <blockquote class="instagram-media"
+            data-instgrm-permalink="https://www.instagram.com/p/DRwjksQDKLG/?utm_source=ig_embed&amp;utm_campaign=loading"
+            data-instgrm-version="14"
+            style="background:#111;border:0;margin:0;padding:0;width:100%;">
+          </blockquote>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- ── Footer ────────────────────────────────────────────── -->
+   <!-- ── Footer ────────────────────────────────────────────── -->
   <footer>
-    <p>&copy; 2023 vPere's GitHub Site. All rights reserved.</p>
+    <p>&copy; 2026 vPere's GitHub Site. All rights reserved.</p>
     <a href="https://www.linkedin.com/in/michael-bacon-galtes/">Michael Bacon Galtes</a>
   </footer>
-
+ 
   <!-- ── Scripts ───────────────────────────────────────────── -->
   <!-- i18next + HTTP backend (fixes the blank text bug) -->
   <script src="https://cdn.jsdelivr.net/npm/i18next@21.7.1/dist/umd/i18next.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/i18next-http-backend@1.4.5/i18nextHttpBackend.min.js"></script>
-
+ 
   <!-- Instagram embeds -->
   <script async src="https://www.instagram.com/embed.js"></script>
-
+ 
   <!-- i18n loader -->
   <script src="./i18n-loader.js"></script>
-
+ 
   <!-- Mobile nav toggle -->
   <script>
     const toggle = document.getElementById('navToggle');
@@ -146,9 +162,9 @@
       l.addEventListener('click', () => drawer.classList.remove('open'))
     );
   </script>
-
+ 
   <!-- main.js (language switcher etc.) -->
   <script src="./main.js"></script>
-
+ 
 </body>
 </html>
