@@ -1,0 +1,6 @@
+primary-color: #7173f1;
+secondary-color: #ACBCFF;
+neutral-color: #ACBCFF;
+accent-color: #FFB479;
+background-color: #FFFFFF;
+text-color: #333333;
