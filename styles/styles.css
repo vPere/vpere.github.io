@@ -153,7 +153,7 @@ body {
 
 /* --- Introduction ----------------------------------------- */
 .introduction {
-  background-color: var(--bg-surface);
+  background-color: var(--secondary);
   padding: 80px 2rem;
   display: flex;
   justify-content: center;
