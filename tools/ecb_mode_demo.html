@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ECB Mode Visualizer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  /* ── Variables (dark mode version of vPere palette) ── */
+  :root {
+    --bg:           #0e0e12;
+    --bg-surface:   #15151c;
+    --bg-raised:    #1c1c26;
+    --primary:      #7173f1;
+    --primary-dim:  rgba(113,115,241,0.18);
+    --primary-glow: rgba(113,115,241,0.35);
+    --secondary:    #ACBCFF;
+    --accent:       #FFB479;
+    --accent-dim:   rgba(255,180,121,0.15);
+    --text:         #e8e8f0;
+    --text-muted:   #7a7a9a;
+    --border:       rgba(113,115,241,0.15);
+    --border-hover: rgba(113,115,241,0.35);
+    --red:          #ff6b6b;
+    --green-ok:     #7173f1;   /* use primary for ok log */
+    --font:         'Geologica', sans-serif;
+    --radius:       10px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* ── Header ── */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 32px 18px;
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    background: var(--bg-surface);
+  }
+
+  header h1 {
+    font-size: 1.1rem;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--primary);
+  }
+
+  .blink { animation: blink 1s step-end infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  .subtitle {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  /* ── Status bar ── */
+  .status-bar {
+    background: var(--bg-raised);
+    border-bottom: 1px solid var(--border);
+    padding: 6px 32px;
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    display: flex;
+    gap: 28px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .status-bar span { color: var(--secondary); }
+
+  /* ── Layout ── */
+  main {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 0;
+    min-height: calc(100vh - 90px);
+  }
+
+  /* ── Left panel ── */
+  .controls {
+    border-right: 1px solid var(--border);
+    padding: 28px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    background: var(--bg-surface);
+  }
+
+  .section-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* Drop zone */
+  .drop-zone {
+    border: 1px dashed var(--border-hover);
+    border-radius: var(--radius);
+    padding: 28px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    background: var(--bg-raised);
+  }
+  .drop-zone:hover, .drop-zone.drag-over {
+    border-color: var(--primary);
+    background: var(--primary-dim);
+  }
+  .drop-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
+  .drop-zone .icon { font-size: 1.8rem; margin-bottom: 10px; display: block; opacity: 0.5; }
+  .drop-zone p { font-size: 0.78rem; color: var(--text-muted); line-height: 1.6; }
+  .drop-zone .req { font-size: 0.65rem; color: var(--text-muted); margin-top: 8px; opacity: 0.6; }
+
+  /* Form fields */
+  label.field-label {
+    display: block;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 7px;
+  }
+
+  select, input[type="text"], input[type="number"] {
+    width: 100%;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 0.82rem;
+    font-weight: 300;
+    padding: 8px 12px;
+    outline: none;
+    appearance: none;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  select:focus, input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-dim);
+  }
+  select option { background: var(--bg-raised); }
+
+  .key-row { display: flex; gap: 8px; align-items: flex-end; }
+  .key-row input { flex: 1; font-size: 0.72rem; font-family: monospace; }
+
+  /* Buttons */
+  .btn {
+    font-family: var(--font);
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    padding: 8px 14px;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg-raised);
+    color: var(--text-muted);
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-dim);
+  }
+
+  .btn-primary {
+    width: 100%;
+    padding: 11px;
+    font-size: 0.82rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-dim);
+    border-radius: var(--radius);
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: rgba(113,115,241,0.28);
+    box-shadow: 0 0 20px rgba(113,115,241,0.2);
+  }
+  .btn-primary:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .btn-download {
+    display: none;
+    width: 100%;
+    padding: 11px;
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    color: var(--accent);
+    background: var(--accent-dim);
+    font-family: var(--font);
+    font-size: 0.78rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-download:hover { background: rgba(255,180,121,0.25); }
+  .btn-download.visible { display: block; }
+
+  /* Radio group */
+  .radio-group { display: flex; gap: 0; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); }
+  .radio-group label {
+    flex: 1;
+    text-align: center;
+    padding: 8px 4px;
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: all 0.15s;
+    background: var(--bg-raised);
+    border: none;
+    font-family: var(--font);
+  }
+  .radio-group label:not(:last-child) { border-right: 1px solid var(--border); }
+  .radio-group input[type="radio"] { display: none; }
+  .radio-group label.active {
+    background: var(--primary-dim);
+    color: var(--secondary);
+  }
+
+  /* Info box */
+  .info-box {
+    background: var(--bg-raised);
+    border-left: 2px solid var(--primary);
+    border-radius: 0 6px 6px 0;
+    padding: 12px 14px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+  .info-box strong { color: var(--secondary); font-weight: 400; }
+
+  /* ── Right panel ── */
+  .output-panel {
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .images-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .img-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-surface);
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .img-card:hover { border-color: var(--border-hover); }
+
+  .img-card-header {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .img-card-title {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .img-card-meta {
+    font-size: 0.65rem;
+    color: var(--primary);
+    letter-spacing: 0.05em;
+    font-family: monospace;
+  }
+
+  .img-card canvas, .img-card img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 420px;
+    object-fit: contain;
+    image-rendering: pixelated;
+    background: #000;
+  }
+
+  .placeholder {
+    height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.4;
+  }
+  .placeholder .ph-icon { font-size: 2.5rem; opacity: 0.5; }
+
+  /* Log */
+  .log-panel {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-surface);
+    overflow: hidden;
+  }
+  .log-header {
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    display: flex;
+    justify-content: space-between;
+  }
+  .log-body {
+    padding: 12px 16px;
+    font-size: 0.72rem;
+    height: 130px;
+    overflow-y: auto;
+    line-height: 1.8;
+    color: var(--text-muted);
+    font-family: monospace;
+  }
+  .log-body::-webkit-scrollbar { width: 4px; }
+  .log-body::-webkit-scrollbar-track { background: var(--bg-raised); }
+  .log-body::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 2px; }
+
+  .log-entry { display: flex; gap: 12px; }
+  .log-ts { color: var(--text-muted); opacity: 0.5; min-width: 75px; }
+  .log-ok   { color: var(--primary); }
+  .log-warn { color: var(--accent); }
+  .log-err  { color: var(--red); }
+
+  /* Progress */
+  .progress-wrap { display: none; }
+  .progress-wrap.visible { display: block; }
+  .progress-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  .progress-bar-outer {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    height: 5px;
+    background: var(--bg-raised);
+    overflow: hidden;
+  }
+  .progress-bar-inner {
+    height: 100%;
+    background: var(--primary);
+    width: 0%;
+    transition: width 0.1s;
+    box-shadow: 0 0 8px var(--primary);
+  }
+
+  @media (max-width: 900px) {
+    main { grid-template-columns: 1fr; }
+    .controls { border-right: none; border-bottom: 1px solid var(--border); }
+    .images-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>ECB Mode Visualizer<span class="blink">_</span></h1>
+  <span class="subtitle">Block cipher pattern analysis</span>
+</header>
+
+<div class="status-bar">
+  <div>System: <span>Online</span></div>
+  <div>Crypto: <span>Web Crypto API</span></div>
+  <div>Engine: <span id="stat-engine">—</span></div>
+  <div>Status: <span id="stat-status">Awaiting input</span></div>
+</div>
+
+<main>
+  <!-- LEFT: CONTROLS -->
+  <aside class="controls">
+    <div>
+      <div class="section-label">01 · Input image</div>
+      <div class="drop-zone" id="dropZone">
+        <input type="file" id="fileInput" accept=".bmp,image/bmp">
+        <span class="icon">⬡</span>
+        <p>Drop BMP file here<br>or click to browse</p>
+        <p class="req">Windows BMP · 24-bit or 8-bit<br>Headers preserved automatically</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-label">02 · Cipher settings</div>
+
+      <div style="margin-bottom:16px">
+        <label class="field-label">Algorithm</label>
+        <div class="radio-group" id="algoGroup">
+          <label class="active" data-val="AES-128"><input type="radio" name="algo" value="AES-128" checked><span>AES-128</span></label>
+          <label data-val="AES-256"><input type="radio" name="algo" value="AES-256"><span>AES-256</span></label>
+          <label data-val="XOR"><input type="radio" name="algo" value="XOR"><span>XOR-8</span></label>
+        </div>
+      </div>
+
+      <div style="margin-bottom:16px">
+        <label class="field-label">Pixel format</label>
+        <select id="pixelFormat">
+          <option value="24">24-bit RGB → ~5px per AES block</option>
+          <option value="8" selected>8-bit Grayscale → 16px per AES block</option>
+          <option value="8xor">8-bit Grayscale + XOR → 1px per block</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="field-label">Encryption key (hex)</label>
+        <div class="key-row">
+          <input type="text" id="keyInput" placeholder="auto-generated" readonly>
+          <button class="btn" id="genKeyBtn" title="Generate new key">↻ New</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-box" id="algoInfo">
+      <strong>AES-128 ECB</strong> — 128-bit key, 16-byte blocks.<br>
+      On an 8-bit BMP: each block covers <strong>16 pixels</strong> in a row. Identical pixel runs become identical ciphertext runs, revealing structure.
+    </div>
+
+    <div>
+      <div class="section-label">03 · Process</div>
+      <button class="btn-primary" id="encryptBtn" disabled>▶ Encrypt image</button>
+      <div class="progress-wrap" id="progressWrap" style="margin-top:12px;">
+        <div class="progress-label" id="progressLabel">Encrypting...</div>
+        <div class="progress-bar-outer"><div class="progress-bar-inner" id="progressBar"></div></div>
+      </div>
+    </div>
+
+    <button class="btn-download" id="downloadBtn">↓ Download encrypted BMP</button>
+  </aside>
+
+  <!-- RIGHT: OUTPUT -->
+  <section class="output-panel">
+    <div class="images-grid">
+      <div class="img-card">
+        <div class="img-card-header">
+          <span class="img-card-title">Original</span>
+          <span class="img-card-meta" id="origMeta">No file loaded</span>
+        </div>
+        <div id="origContainer">
+          <div class="placeholder">
+            <span class="ph-icon">▣</span>
+            <span>Awaiting file</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="img-card">
+        <div class="img-card-header">
+          <span class="img-card-title">ECB Encrypted</span>
+          <span class="img-card-meta" id="encMeta">—</span>
+        </div>
+        <div id="encContainer">
+          <div class="placeholder">
+            <span class="ph-icon">▨</span>
+            <span>Awaiting encryption</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="log-panel">
+      <div class="log-header">
+        <span>Operation log</span>
+        <span id="logCount">0 entries</span>
+      </div>
+      <div class="log-body" id="logBody"></div>
+    </div>
+  </section>
+</main>
+
+<script>
+// ─── State ────────────────────────────────────────────────────────────────────
+let originalBmpBytes = null;
+let encryptedBmpBytes = null;
+let currentAlgo = 'AES-128';
+let logEntries = 0;
+
+// ─── Logging ──────────────────────────────────────────────────────────────────
+function log(msg, type='ok') {
+  const body = document.getElementById('logBody');
+  const now = new Date();
+  const ts = now.toTimeString().slice(0,8);
+  const div = document.createElement('div');
+  div.className = 'log-entry';
+  div.innerHTML = `<span class="log-ts">[${ts}]</span><span class="log-${type}">${msg}</span>`;
+  body.appendChild(div);
+  body.scrollTop = body.scrollHeight;
+  logEntries++;
+  document.getElementById('logCount').textContent = `${logEntries} entries`;
+}
+
+// ─── Key Generation ───────────────────────────────────────────────────────────
+function generateKey(bits = 128) {
+  const bytes = bits / 8;
+  const arr = new Uint8Array(bytes);
+  crypto.getRandomValues(arr);
+  return arr;
+}
+
+function keyToHex(arr) {
+  return Array.from(arr).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+function setNewKey() {
+  const bits = currentAlgo === 'AES-256' ? 256 : 128;
+  const k = generateKey(bits);
+  document.getElementById('keyInput').value = keyToHex(k);
+  document.getElementById('keyInput')._keyBytes = k;
+  log(`Generated ${bits}-bit key: ${keyToHex(k).slice(0,16)}...`, 'ok');
+}
+
+// ─── BMP Parsing ──────────────────────────────────────────────────────────────
+function parseBmpHeader(data) {
+  const view = new DataView(data.buffer);
+  const sig = String.fromCharCode(data[0], data[1]);
+  if (sig !== 'BM') throw new Error('Not a valid BMP file (missing BM signature)');
+  const fileSize = view.getUint32(2, true);
+  const pixelOffset = view.getUint32(10, true);
+  const dibSize = view.getUint32(14, true);
+  const width = view.getInt32(18, true);
+  const height = view.getInt32(22, true);
+  const bitsPerPixel = view.getUint16(28, true);
+  const compression = view.getUint32(30, true);
+  return { fileSize, pixelOffset, dibSize, width, height, bitsPerPixel, compression, sig };
+}
+
+// ─── Rendering BMP to Canvas ──────────────────────────────────────────────────
+function renderBmpToCanvas(bmpBytes, containerId, metaId, label) {
+  const container = document.getElementById(containerId);
+  const meta = document.getElementById(metaId);
+
+  try {
+    const hdr = parseBmpHeader(bmpBytes);
+    meta.textContent = `${hdr.width}×${Math.abs(hdr.height)}px  ${hdr.bitsPerPixel}bpp`;
+
+    const blob = new Blob([bmpBytes], { type: 'image/bmp' });
+    const url = URL.createObjectURL(blob);
+    const img = document.createElement('img');
+    img.style.cssText = 'display:block;width:100%;max-height:420px;object-fit:contain;background:#000;image-rendering:pixelated;';
+    img.onload = () => URL.revokeObjectURL(url);
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      renderBmpManual(bmpBytes, container, hdr);
+    };
+    img.src = url;
+    container.innerHTML = '';
+    container.appendChild(img);
+    log(`${label}: ${hdr.width}×${Math.abs(hdr.height)} px, ${hdr.bitsPerPixel}-bit`, 'ok');
+  } catch(e) {
+    container.innerHTML = `<div class="placeholder"><span style="color:var(--red)">${e.message}</span></div>`;
+    meta.textContent = 'ERROR';
+    log(e.message, 'err');
+  }
+}
+
+function renderBmpManual(bmpBytes, container, hdr) {
+  const view = new DataView(bmpBytes.buffer);
+  const W = hdr.width, H = Math.abs(hdr.height);
+  const canvas = document.createElement('canvas');
+  canvas.width = W; canvas.height = H;
+  canvas.style.cssText = 'display:block;width:100%;max-height:420px;object-fit:contain;background:#000;image-rendering:pixelated;';
+  const ctx = canvas.getContext('2d');
+  const imgData = ctx.createImageData(W, H);
+  const pixels = imgData.data;
+  const flipped = hdr.height > 0;
+  const offset = hdr.pixelOffset;
+
+  if (hdr.bitsPerPixel === 24) {
+    const rowSize = Math.floor((24 * W + 31) / 32) * 4;
+    for (let row = 0; row < H; row++) {
+      const srcRow = flipped ? (H - 1 - row) : row;
+      for (let col = 0; col < W; col++) {
+        const src = offset + srcRow * rowSize + col * 3;
+        const dst = (row * W + col) * 4;
+        pixels[dst]   = bmpBytes[src+2];
+        pixels[dst+1] = bmpBytes[src+1];
+        pixels[dst+2] = bmpBytes[src];
+        pixels[dst+3] = 255;
+      }
+    }
+  } else if (hdr.bitsPerPixel === 8) {
+    const palOffset = 14 + hdr.dibSize;
+    const palette = [];
+    for (let i = 0; i < 256; i++) {
+      palette.push([
+        bmpBytes[palOffset + i*4 + 2],
+        bmpBytes[palOffset + i*4 + 1],
+        bmpBytes[palOffset + i*4 + 0],
+      ]);
+    }
+    const rowSize = Math.floor((8 * W + 31) / 32) * 4;
+    for (let row = 0; row < H; row++) {
+      const srcRow = flipped ? (H - 1 - row) : row;
+      for (let col = 0; col < W; col++) {
+        const idx = bmpBytes[offset + srcRow * rowSize + col];
+        const dst = (row * W + col) * 4;
+        const [r,g,b] = palette[idx];
+        pixels[dst]=r; pixels[dst+1]=g; pixels[dst+2]=b; pixels[dst+3]=255;
+      }
+    }
+  }
+
+  ctx.putImageData(imgData, 0, 0);
+  container.innerHTML = '';
+  container.appendChild(canvas);
+}
+
+// ─── AES-ECB via Web Crypto ───────────────────────────────────────────────────
+async function aesEcbEncrypt(keyBytes, dataBytes) {
+  const keyLen = keyBytes.length * 8;
+  const cryptoKey = await crypto.subtle.importKey(
+    'raw', keyBytes,
+    { name: 'AES-CBC', length: keyLen },
+    false, ['encrypt']
+  );
+
+  const BLOCK = 16;
+  const out = new Uint8Array(dataBytes.length);
+  const nullIV = new ArrayBuffer(16);
+
+  const batchSize = 256;
+  const totalBlocks = Math.floor(dataBytes.length / BLOCK);
+
+  for (let b = 0; b < totalBlocks; b += batchSize) {
+    const end = Math.min(b + batchSize, totalBlocks);
+    const promises = [];
+    for (let i = b; i < end; i++) {
+      const block = dataBytes.slice(i * BLOCK, (i + 1) * BLOCK);
+      promises.push(
+        crypto.subtle.encrypt({ name: 'AES-CBC', iv: nullIV }, cryptoKey, block)
+          .then(ct => {
+            out.set(new Uint8Array(ct, 0, BLOCK), i * BLOCK);
+          })
+      );
+    }
+    await Promise.all(promises);
+    await new Promise(r => setTimeout(r, 0));
+
+    const pct = Math.round((end / totalBlocks) * 100);
+    document.getElementById('progressBar').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = `Encrypting... ${pct}%`;
+  }
+
+  const rem = dataBytes.length % BLOCK;
+  if (rem > 0) {
+    out.set(dataBytes.slice(totalBlocks * BLOCK), totalBlocks * BLOCK);
+  }
+
+  return out;
+}
+
+// ─── XOR cipher ───────────────────────────────────────────────────────────────
+function xorEncrypt(keyBytes, dataBytes) {
+  const out = new Uint8Array(dataBytes.length);
+  for (let i = 0; i < dataBytes.length; i++) {
+    out[i] = dataBytes[i] ^ keyBytes[i % keyBytes.length];
+  }
+  return out;
+}
+
+// ─── 24-bit → 8-bit Grayscale BMP ────────────────────────────────────────────
+function convertTo8bitGrayscale(bmpBytes) {
+  const hdr = parseBmpHeader(bmpBytes);
+  if (hdr.bitsPerPixel !== 24 && hdr.bitsPerPixel !== 8) throw new Error('Only 24-bit or 8-bit BMPs supported');
+  if (hdr.compression !== 0) throw new Error('Compressed BMPs not supported. Use uncompressed BMP.');
+  if (hdr.bitsPerPixel === 8) return bmpBytes;
+
+  const W = hdr.width, H = Math.abs(hdr.height);
+  const flipped = hdr.height > 0;
+  const srcRowSize = Math.floor((24 * W + 31) / 32) * 4;
+  const dstRowSize = Math.floor((8 * W + 31) / 32) * 4;
+
+  const newPixelOffset = 54 + 1024;
+  const newFileSize = newPixelOffset + dstRowSize * H;
+  const out = new Uint8Array(newFileSize);
+  const view = new DataView(out.buffer);
+
+  out[0]=0x42; out[1]=0x4D;
+  view.setUint32(2, newFileSize, true);
+  view.setUint32(6, 0, true);
+  view.setUint32(10, newPixelOffset, true);
+  view.setUint32(14, 40, true);
+  view.setInt32(18, W, true);
+  view.setInt32(22, flipped ? H : -H, true);
+  view.setUint16(26, 1, true);
+  view.setUint16(28, 8, true);
+  view.setUint32(30, 0, true);
+  view.setUint32(34, dstRowSize * H, true);
+  view.setInt32(38, 2835, true);
+  view.setInt32(42, 2835, true);
+  view.setUint32(46, 256, true);
+  view.setUint32(50, 256, true);
+
+  for (let i = 0; i < 256; i++) {
+    const p = 54 + i * 4;
+    out[p]=i; out[p+1]=i; out[p+2]=i; out[p+3]=0;
+  }
+
+  for (let row = 0; row < H; row++) {
+    const srcRow = flipped ? (H - 1 - row) : row;
+    for (let col = 0; col < W; col++) {
+      const src = hdr.pixelOffset + srcRow * srcRowSize + col * 3;
+      const gray = Math.round(0.299*bmpBytes[src+2] + 0.587*bmpBytes[src+1] + 0.114*bmpBytes[src]);
+      out[newPixelOffset + row * dstRowSize + col] = gray;
+    }
+  }
+
+  return out;
+}
+
+// ─── Main Encrypt Flow ────────────────────────────────────────────────────────
+async function encryptBmp() {
+  if (!originalBmpBytes) return;
+
+  const algo = currentAlgo;
+  const pixFmt = document.getElementById('pixelFormat').value;
+  const keyBytes = document.getElementById('keyInput')._keyBytes;
+
+  document.getElementById('encryptBtn').disabled = true;
+  document.getElementById('progressWrap').classList.add('visible');
+  document.getElementById('progressBar').style.width = '0%';
+  document.getElementById('stat-status').textContent = 'Processing';
+
+  try {
+    log(`Starting ECB encryption — algo: ${algo}`, 'ok');
+
+    let workBytes = new Uint8Array(originalBmpBytes);
+
+    if (pixFmt === '8' || pixFmt === '8xor') {
+      const hdr = parseBmpHeader(workBytes);
+      if (hdr.bitsPerPixel === 24) {
+        log('Converting 24-bit → 8-bit grayscale...', 'warn');
+        workBytes = convertTo8bitGrayscale(workBytes);
+        log('Conversion complete', 'ok');
+      }
+    }
+
+    const hdr = parseBmpHeader(workBytes);
+    const pixelOffset = hdr.pixelOffset;
+    const pixelData = workBytes.slice(pixelOffset);
+    const header = workBytes.slice(0, pixelOffset);
+
+    log(`Header: ${pixelOffset} bytes | Pixel data: ${pixelData.length} bytes`, 'ok');
+    log(`Block size: ${algo === 'XOR' || pixFmt === '8xor' ? '1 byte (XOR)' : '16 bytes (AES)'} | ${hdr.width}×${Math.abs(hdr.height)} px`, 'ok');
+
+    let encPixels;
+    if (algo === 'XOR' || pixFmt === '8xor') {
+      encPixels = xorEncrypt(keyBytes, pixelData);
+      document.getElementById('progressBar').style.width = '100%';
+    } else {
+      encPixels = await aesEcbEncrypt(keyBytes, pixelData);
+    }
+
+    const result = new Uint8Array(header.length + encPixels.length);
+    result.set(header, 0);
+    result.set(encPixels, header.length);
+    encryptedBmpBytes = result;
+
+    log('Encryption complete — rendering output...', 'ok');
+    renderBmpToCanvas(result, 'encContainer', 'encMeta', 'Encrypted');
+    document.getElementById('downloadBtn').classList.add('visible');
+    document.getElementById('stat-status').textContent = 'Complete';
+
+    const blockSz = (algo === 'XOR' || pixFmt === '8xor') ? 1 : 16;
+    const bytesPerPx = hdr.bitsPerPixel / 8;
+    const pxPerBlock = blockSz / bytesPerPx;
+    log(`Visual resolution: ~${pxPerBlock.toFixed(1)} pixels per encrypted block`, 'ok');
+
+  } catch(e) {
+    log(e.message, 'err');
+    document.getElementById('stat-status').textContent = 'Error';
+  } finally {
+    document.getElementById('encryptBtn').disabled = false;
+    document.getElementById('progressWrap').classList.remove('visible');
+  }
+}
+
+// ─── File Loading ─────────────────────────────────────────────────────────────
+function loadFile(file) {
+  if (!file) return;
+  if (!file.name.toLowerCase().endsWith('.bmp') && file.type !== 'image/bmp') {
+    log(`Rejected: "${file.name}" is not a BMP file`, 'err');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    originalBmpBytes = new Uint8Array(e.target.result);
+    encryptedBmpBytes = null;
+    document.getElementById('downloadBtn').classList.remove('visible');
+    document.getElementById('encContainer').innerHTML = '<div class="placeholder"><span class="ph-icon">▨</span><span>Press encrypt</span></div>';
+    document.getElementById('encMeta').textContent = '—';
+
+    try {
+      parseBmpHeader(originalBmpBytes);
+      log(`Loaded: "${file.name}" — ${(file.size/1024).toFixed(1)} KB`, 'ok');
+      renderBmpToCanvas(originalBmpBytes, 'origContainer', 'origMeta', 'Original');
+      document.getElementById('encryptBtn').disabled = false;
+      document.getElementById('stat-status').textContent = 'File loaded';
+    } catch(err) {
+      log(err.message, 'err');
+      originalBmpBytes = null;
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+// ─── Download ─────────────────────────────────────────────────────────────────
+document.getElementById('downloadBtn').addEventListener('click', () => {
+  if (!encryptedBmpBytes) return;
+  const blob = new Blob([encryptedBmpBytes], { type: 'image/bmp' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'ecb_encrypted.bmp';
+  a.click();
+  URL.revokeObjectURL(url);
+  log('Downloaded: ecb_encrypted.bmp', 'ok');
+});
+
+// ─── Algorithm Selection ──────────────────────────────────────────────────────
+const algoInfoMap = {
+  'AES-128': `<strong>AES-128 ECB</strong> — 128-bit key, 16-byte blocks.<br>On 8-bit BMP: each block covers <strong>16 pixels</strong> per row. Identical pixel runs → identical ciphertext.`,
+  'AES-256': `<strong>AES-256 ECB</strong> — 256-bit key, still 16-byte blocks.<br>Same visual resolution as AES-128, but a stronger key. The pattern effect is identical.`,
+  'XOR': `<strong>XOR-8</strong> — 128-bit repeating key XORed byte by byte.<br>Effective block size = <strong>1 byte = 1 pixel</strong> (8-bit BMP). Maximum detail. Also demonstrates why XOR with a short key is trivially broken.`,
+};
+
+document.getElementById('algoGroup').querySelectorAll('label').forEach(lbl => {
+  lbl.addEventListener('click', () => {
+    document.getElementById('algoGroup').querySelectorAll('label').forEach(l => l.classList.remove('active'));
+    lbl.classList.add('active');
+    currentAlgo = lbl.dataset.val;
+    document.getElementById('stat-engine').textContent = currentAlgo;
+    document.getElementById('algoInfo').innerHTML = algoInfoMap[currentAlgo];
+
+    if (currentAlgo === 'XOR') {
+      document.getElementById('pixelFormat').value = '8xor';
+    } else if (document.getElementById('pixelFormat').value === '8xor') {
+      document.getElementById('pixelFormat').value = '8';
+    }
+
+    setNewKey();
+  });
+});
+
+// ─── Drag and Drop ────────────────────────────────────────────────────────────
+const dropZone = document.getElementById('dropZone');
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault(); dropZone.classList.remove('drag-over');
+  loadFile(e.dataTransfer.files[0]);
+});
+document.getElementById('fileInput').addEventListener('change', e => loadFile(e.target.files[0]));
+document.getElementById('genKeyBtn').addEventListener('click', setNewKey);
+document.getElementById('encryptBtn').addEventListener('click', encryptBmp);
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+(function init() {
+  setNewKey();
+  document.getElementById('stat-engine').textContent = 'AES-128';
+  log('ECB Mode Visualizer ready', 'ok');
+  log('Load a BMP file to begin', 'ok');
+})();
+</script>
+</body>
+</html>
