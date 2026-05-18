@@ -254,9 +254,7 @@ body {
   color: var(--secondary);
 }
 
-/* --- Photo / Instagram Grid ------------------------------ */
-#research { background-color: var(--bg-surface); }
-#photo { background-color: var(--bg-surface); }
+#experience { background-color: var(--bg-surface); }
 
 .ig-grid {
   display: grid;
