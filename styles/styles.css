@@ -255,6 +255,7 @@ body {
 }
 
 /* --- Photo / Instagram Grid ------------------------------ */
+#research { background-color: var(--bg-surface); }
 #photo { background-color: var(--bg-surface); }
 
 .ig-grid {
