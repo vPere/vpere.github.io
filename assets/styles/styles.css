@@ -2,8 +2,6 @@
    vPere — styles.css
    ============================================================ */
 
-@import url('./colors.css');
-
 /* --- Reset & Base ----------------------------------------- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -21,7 +19,7 @@ body {
   top: 0;
   z-index: 100;
   height: 60px;
-  background-color: rgba(255, 255, 255, 0.85);
+  background-color: var(--navbar-bg, rgba(255,255,255,0.85));
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
@@ -73,8 +71,7 @@ body {
 .nav-dropdown-menu {
   display: none;
   position: absolute;
-  top: calc(100% + 12px);
-  left: 50%;
+  top: 100%;
   transform: translateX(-50%);
   background: var(--bg);
   border: 1px solid var(--border);
@@ -82,8 +79,9 @@ body {
   overflow: hidden;
   min-width: 120px;
   z-index: 200;
-  box-shadow: 0 8px 24px rgba(113, 115, 241, 0.12);
+  box-shadow: 0 8px 24px var(--shadow-primary, rgba(113,115,241,0.12));
 }
+
 .nav-dropdown:hover .nav-dropdown-menu,
 .nav-dropdown:focus-within .nav-dropdown-menu { display: block; }
 .nav-dropdown-menu a {
@@ -98,6 +96,17 @@ body {
   background: var(--bg-surface);
   color: var(--primary);
 }
+
+.nav-theme-toggle {
+  background: none;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  color: var(--primary);
+  font-size: 1.2rem;
+}
+.nav-theme-toggle:hover { color: var(--accent); }
 
 /* Mobile nav */
 .navbar-toggler {
@@ -261,7 +270,7 @@ body {
 .ig-card:hover {
   border-color: var(--border-hover);
   transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(113, 115, 241, 0.12);
+  box-shadow: 0 8px 24px var(--shadow-primary, rgba(113,115,241,0.12));
 }
 .ig-card--featured { grid-row: span 2; }
 

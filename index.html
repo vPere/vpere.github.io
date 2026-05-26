@@ -7,7 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles/styles.css">
+  <link id="theme-link" rel="stylesheet" href="./assets/styles/colors_dark.css">
+  <link rel="stylesheet" href="./assets/styles/styles.css">
 </head>
 <body>
  
@@ -33,6 +34,10 @@
           <a href="#" data-locale="en" data-i18n="nav.lng.en"></a>
         </div>
       </div>
+       <!-- Theme toggle -->
+      <button class="nav-theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <span id="themeIcon">☾</span>
+      </button>
     </div>
   </nav>
  
@@ -201,28 +206,10 @@
     <p>&copy; 2026 vPere's GitHub Site. All rights reserved.</p>
   </footer>
  
-  <!-- ── Scripts ───────────────────────────────────────────── -->
-  <!-- i18next + HTTP backend (fixes the blank text bug) -->
   <script src="https://cdn.jsdelivr.net/npm/i18next@21.7.1/dist/umd/i18next.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/i18next-http-backend@1.4.5/i18nextHttpBackend.min.js"></script>
- 
-  <!-- Instagram embeds -->
   <script async src="https://www.instagram.com/embed.js"></script>
- 
-  <!-- i18n loader -->
-  <script src="./assets/js/i18n-loader.js"></script>
- 
-  <!-- Mobile nav toggle -->
-  <script>
-    const toggle = document.getElementById('navToggle');
-    const drawer = document.getElementById('mobileNav');
-    toggle.addEventListener('click', () => drawer.classList.toggle('open'));
-    drawer.querySelectorAll('.nav-link').forEach(l =>
-      l.addEventListener('click', () => drawer.classList.remove('open'))
-    );
-  </script>
- 
-  <!-- main.js (language switcher etc.) -->
+  <script src="./assets/js/i18n-loader.js"></script> 
   <script src="./assets/js/main.js"></script>
  
 </body>
