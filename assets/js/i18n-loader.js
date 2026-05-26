@@ -27,7 +27,7 @@ i18next
     fallbackLng: 'ca',
     supportedLngs: ['ca', 'es', 'en'],
     backend: {
-      loadPath: '/i18n/{{lng}}.json'
+      loadPath: '/assets/translations/{{lng}}.json'
     }
   }, function(err, t) {
     if (err) {
