@@ -7,6 +7,7 @@
   "nav.languages": "Idiomas",
   "nav.tools": "Herramientas",
   "nav.tools.ecb": "ECB Mode Demo",
+  "nav.tools.metadata": "Image Metadata Viewer",
   "section.about.content": "Me llamo Pere y soy ingeniero inform\u00E1tico. Me gusta programar, dise\u00F1ar y aprender cosas nuevas. Actualmente estoy trabajando como desarrollador web en Barcelona.",
   "section.about.content2": "Tengo experiencia en desarrollo web principalmente en el frontend, utilizando AngularJS, Typescript, Node y Bootstrap. Tambi\u00E9n he trabajado con Java, Spring y Python.",
   "section.experience.title": "Experiencia",
