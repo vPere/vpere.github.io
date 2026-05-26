@@ -1,22 +1,8 @@
 /* ============================================================
-   vPere — styles.css  (plain CSS, no Sass required)
+   vPere — styles.css
    ============================================================ */
 
-/* --- Variables -------------------------------------------- */
-:root {
-  --bg:           #FFFFFF;
-  --bg-surface:   #f4f5ff;   /* faint lavender tint for alt sections  */
-  --bg-raised:    #eceeff;   /* cards / raised surfaces               */
-  --primary:      #7173f1;   /* $primary-color   — purple             */
-  --secondary:    #ACBCFF;   /* $secondary-color — light lavender     */
-  --accent:       #FFB479;   /* $accent-color    — warm orange        */
-  --text:         #333333;   /* $text-color                           */
-  --text-muted:   #7a7a9a;
-  --border:       rgba(113, 115, 241, 0.15);
-  --border-hover: rgba(113, 115, 241, 0.35);
-  --radius:       12px;
-  --font:         'Geologica', sans-serif;
-}
+@import url('./colors.css');
 
 /* --- Reset & Base ----------------------------------------- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
