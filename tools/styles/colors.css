@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:wght@300;400;500&family=Geologica:wght@300;400&display=swap');
+
+:root {
+  /* ── Backgrounds ── */
+  --bg:           #0d0d0d;
+  --bg-surface:   #141414;   /* = --surface  in file 1 */
+  --bg-raised:    #1a1a1a;   /* = --surface2 in file 1 / --bg-raised in file 2 */
+  --bg-elevated:  #222222;   /* = --surface3 in file 1 */
+
+  /* ── Borders ── */
+  --border:       #2a2a2a;
+  --border-2:     #333333;
+  --border-hover: rgba(168,85,247,0.35);
+
+  /* ── Text ── */
+  --text:         #e8e8e8;
+  --text-muted:   #888888;   /* = --text-dim  in file 1 / --text-muted in file 2 */
+  --text-faint:   #444444;
+
+  /* ── Primary accent (purple) ── */
+  --primary:      #a855f7;
+  --primary-dim:  #7c3aed;
+  --primary-bg:   rgba(168,85,247,0.08);
+  --primary-bg-2: rgba(168,85,247,0.14);
+  --primary-glow: rgba(168,85,247,0.35);
+
+  /* ── Secondary accent ── */
+  --secondary:    #c4b5fd;   /* light purple for contrast text */
+  --accent:       #fbbf24;   /* amber */
+  --accent-dim:   rgba(251,191,36,0.15);
+
+  /* ── Status colours ── */
+  --green:        #4ade80;
+  --amber:        #fbbf24;
+  --red:          #f87171;
+  --blue:         #60a5fa;
+
+  /* ── Typography ── */
+  --font-sans:    'DM Sans', sans-serif;
+  --font-mono:    'DM Mono', monospace;
+  --font-display: 'Geologica', sans-serif;
+
+  /* ── Shape ── */
+  --radius:       6px;
+  --radius-lg:    10px;
+}
