@@ -353,15 +353,10 @@ async function renderSteg(file, imgEl) {
 
   // Score & render
   const flags     = [lsbSuspect, chiSuspect, unusualMeta, sizeAnomaly].filter(Boolean).length;
-  const riskLevel = flags === 0 ? 'Low' : flags === 1 ? 'Medium' : 'High';
+  const riskLevel = flags === 0 || flags === 1 ? 'Low' : flags === 2 ? 'Medium' : 'High';
   const riskColor = flags === 0 ? 'var(--green)' : flags === 1 ? 'var(--amber)' : 'var(--red)';
 
   let html = `<div class="steg-grid">
-    <div class="steg-card ${flags >= 2 ? 'alert' : flags === 0 ? 'ok' : ''}">
-      <div class="steg-card-title">Overall Risk</div>
-      <div class="steg-result" style="color:${riskColor};font-size:1.1rem;font-weight:500">${riskLevel}</div>
-      <div class="steg-note">${flags} indicator${flags !== 1 ? 's' : ''} flagged. This is a heuristic, not a guarantee.</div>
-    </div>
     <div class="steg-card ${chiSuspect ? 'alert' : 'ok'}">
       <div class="steg-card-title">Chi-Square Test (LSB Pairs)</div>
       <div class="steg-result" style="color:${chiSuspect ? 'var(--amber)' : 'var(--green)'}">

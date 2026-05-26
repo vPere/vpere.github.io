@@ -1,0 +1,51 @@
+/* ═══════════════════════════════════════════
+   theme-amber.css  —  amber accent variant
+   Edit only this file to retheme both apps.
+   ═══════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:wght@300;400;500&family=Geologica:wght@300;400&display=swap');
+
+:root {
+  /* ── Backgrounds (lighter dark) ── */
+  --bg:           #1a1814;
+  --bg-surface:   #211f19;
+  --bg-raised:    #2a271f;
+  --bg-elevated:  #333026;
+
+  /* ── Borders ── */
+  --border:       #3a3628;
+  --border-2:     #4a4535;
+  --border-hover: rgba(245,175,2,0.45);
+
+  /* ── Text ── */
+  --text:         #f0ead8;
+  --text-muted:   #8a8070;
+  --text-faint:   #544e40;
+
+  /* ── Primary accent (amber) ── */
+  --primary:      #f5af02;
+  --primary-dim:  #c98d00;
+  --primary-bg:   rgba(245,175,2,0.08);
+  --primary-bg-2: rgba(245,175,2,0.15);
+  --primary-glow: rgba(245,175,2,0.35);
+
+  /* ── Secondary accent ── */
+  --secondary:    #fdd270;   /* light amber for contrast text */
+  --accent:       #e8724a;   /* warm orange-red complement */
+  --accent-dim:   rgba(232,114,74,0.15);
+
+  /* ── Status colours ── */
+  --green:        #6dbd7e;
+  --amber:        #f5af02;
+  --red:          #f07070;
+  --blue:         #7ab4f5;
+
+  /* ── Typography ── */
+  --font-sans:    'DM Sans', sans-serif;
+  --font-mono:    'DM Mono', monospace;
+  --font-display: 'Geologica', sans-serif;
+
+  /* ── Shape ── */
+  --radius:       6px;
+  --radius-lg:    10px;
+}

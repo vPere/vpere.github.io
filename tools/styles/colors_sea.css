@@ -1,0 +1,51 @@
+/* ═══════════════════════════════════════════
+   theme-ocean.css  —  sea blue variant
+   Edit only this file to retheme both apps.
+   ═══════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:wght@300;400;500&family=Geologica:wght@300;400&display=swap');
+
+:root {
+  /* ── Backgrounds (cool blue-tinted dark) ── */
+  --bg:           #111620;
+  --bg-surface:   #161d2e;
+  --bg-raised:    #1c2538;
+  --bg-elevated:  #232e45;
+
+  /* ── Borders ── */
+  --border:       #2a3650;
+  --border-2:     #344463;
+  --border-hover: rgba(32,178,200,0.45);
+
+  /* ── Text ── */
+  --text:         #ddeef5;
+  --text-muted:   #6e8fa8;
+  --text-faint:   #384f63;
+
+  /* ── Primary accent (sea blue) ── */
+  --primary:      #20b2c8;
+  --primary-dim:  #178a9e;
+  --primary-bg:   rgba(32,178,200,0.08);
+  --primary-bg-2: rgba(32,178,200,0.15);
+  --primary-glow: rgba(32,178,200,0.35);
+
+  /* ── Secondary accent ── */
+  --secondary:    #80d8e8;   /* light cyan for contrast text */
+  --accent:       #f4a35a;   /* warm coral complement */
+  --accent-dim:   rgba(244,163,90,0.15);
+
+  /* ── Status colours ── */
+  --green:        #4dce8f;
+  --amber:        #f4a35a;
+  --red:          #f07070;
+  --blue:         #20b2c8;
+
+  /* ── Typography ── */
+  --font-sans:    'DM Sans', sans-serif;
+  --font-mono:    'DM Mono', monospace;
+  --font-display: 'Geologica', sans-serif;
+
+  /* ── Shape ── */
+  --radius:       6px;
+  --radius-lg:    10px;
+}
