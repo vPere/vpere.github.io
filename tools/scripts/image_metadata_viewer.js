@@ -178,11 +178,11 @@ function renderStructured(filter = '', groupFilter = '') {
 // ── Authorship Panel ──────────────────────────────────────────────────────────
 function renderAuthorship() {
   const authorFields = [
-    ['Creator / Author',  ['xmp.Creator', 'iptc.Byline', 'exif.Artist', 'tiff.Artist']],
+    ['Creator / Author',  ['xmp.Creator', 'iptc.Byline', 'exif.Artist', 'tiff.Artist', 'ifd0.Artist']],
     ['Copyright',         ['xmp.Rights', 'iptc.CopyrightNotice', 'exif.Copyright', 'tiff.Copyright']],
-    ['Camera Make',       ['exif.Make', 'tiff.Make']],
-    ['Camera Model',      ['exif.Model', 'tiff.Model']],
-    ['Software',          ['exif.Software', 'tiff.Software', 'xmp.CreatorTool']],
+    ['Camera Make',       ['exif.Make', 'tiff.Make', 'ifd0.Make']],
+    ['Camera Model',      ['exif.Model', 'tiff.Model', 'ifd0.Model']],
+    ['Software',          ['exif.Software', 'tiff.Software', 'xmp.CreatorTool', 'ifd0.Software']],
     ['Date Original',     ['exif.DateTimeOriginal', 'xmp.DateTimeOriginal', 'iptc.DateCreated']],
     ['Date Digitized',    ['exif.DateTimeDigitized', 'xmp.CreateDate']],
     ['Date Modified',     ['exif.DateTime', 'tiff.DateTime', 'xmp.ModifyDate']],
