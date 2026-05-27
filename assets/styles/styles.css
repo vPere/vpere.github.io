@@ -13,6 +13,10 @@ body {
   line-height: 1.7;
 }
 
+a {
+  color: var(--text-muted);  /* was var(--accent) */
+}
+
 /* --- Navbar ----------------------------------------------- */
 .navbar {
   position: sticky;
