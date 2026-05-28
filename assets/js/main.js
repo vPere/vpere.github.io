@@ -16,8 +16,8 @@ mobileNav.querySelectorAll('.nav-link').forEach(l =>
 );
 
 // ── Dark / light theme toggle ─────────────────────────────────────────────────
-const DARK_HREF   = './assets/styles/colors_dark.css';
-const LIGHT_HREF  = './assets/styles/colors.css';
+const DARK_HREF   = './assets/styles/colors_dark_orange.css';
+const LIGHT_HREF  = './assets/styles/colors_light_green.css';
 const STORAGE_KEY = 'vpere-theme';
 
 const themeLink = document.getElementById('theme-link');
@@ -36,6 +36,6 @@ applyTheme(savedTheme !== 'light');
 
 // Wire up the button
 themeBtn.addEventListener('click', () => {
-  const isDark = themeLink.href.includes('colors_dark');
+  const isDark = themeLink.href.includes('colors_dark_orange');
   applyTheme(!isDark);
 });

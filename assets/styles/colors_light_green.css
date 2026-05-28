@@ -1,0 +1,32 @@
+/* ═══════════════════════════════════════════
+   theme-vpere-meadow.css  —  single source of truth
+   Edit only this file to retheme vPere.
+   ═══════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Geologica:wght@300;400&display=swap');
+
+:root {
+  /* ── Backgrounds ── */
+  --bg:           #FFFFFF;
+  --bg-surface:   #f2f7f4;   /* faint sage tint for alt sections  */
+  --bg-raised:    #e4ede7;   /* cards / raised surfaces           */
+
+  /* ── Borders ── */
+  --border:       rgba(34,110,60,0.15);
+  --border-hover: rgba(34,110,60,0.35);
+
+  /* ── Text ── */
+  --text:         #1a2e20;
+  --text-muted:   #5a7a62;
+
+  /* ── Accent colours ── */
+  --primary:      #226e3c;   /* deep forest green  */
+  --secondary:    #8fbf9a;   /* muted sage         */
+  --accent:       #e8883a;   /* warm amber         */
+
+  /* ── Typography ── */
+  --font:         'Geologica', sans-serif;
+
+  /* ── Shape ── */
+  --radius:       12px;
+}
