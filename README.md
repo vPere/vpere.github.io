@@ -6,6 +6,5 @@ Hi! This is the repository of my github pages site, where you can find the sourc
 
 ## Ideas:
 
-- add favicon and other missing media
 - add tools page
 - add small ctf tab
