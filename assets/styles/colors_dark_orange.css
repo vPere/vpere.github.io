@@ -6,8 +6,8 @@
 
 :root {
   /* ── Backgrounds ── */
-  --bg:           #110f0d;
-  --bg-surface:   #0c0b09;   /* alt sections  */
+  --bg:           #0c0b09;
+  --bg-surface:   #110f0d;   /* alt sections  */
   --bg-raised:    #2a241c;   /* cards / raised surfaces */
 
   /* ── Borders ── */
