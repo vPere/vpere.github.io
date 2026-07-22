@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Watch Faces for Wear OS — vpere</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0B0D10;
+    --panel: #14171B;
+    --panel-line: #23272D;
+    --text: #F2F0EA;
+    --text-muted: #7A828C;
+    --gold: #E8B54A;
+    --red: #DA3540;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.035) 1px, transparent 0);
+    background-size: 28px 28px;
+    z-index: 0;
+  }
+
+  a { color: inherit; }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* Header */
+  header.top {
+    padding: 28px 0 0;
+  }
+  .top-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--panel-line);
+  }
+  .brand {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.02em;
+  }
+  .brand span { color: var(--text-muted); font-weight: 400; }
+  nav.top-nav a {
+    text-decoration: none;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-left: 28px;
+    font-family: 'JetBrains Mono', monospace;
+    transition: color .15s ease;
+  }
+  nav.top-nav a:hover { color: var(--text); }
+
+  /* Hero */
+  .hero {
+    padding: 90px 0 70px;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 40px;
+    align-items: center;
+  }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 0 3px rgba(232,181,74,0.18);
+  }
+  h1.headline {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: clamp(34px, 4.6vw, 54px);
+    line-height: 1.06;
+    letter-spacing: -0.01em;
+    margin: 0 0 22px;
+  }
+  h1.headline em {
+    font-style: normal;
+    background: linear-gradient(90deg, var(--gold), #f3d089);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero p.sub {
+    font-size: 16.5px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    max-width: 46ch;
+    margin: 0 0 30px;
+  }
+  .hero-cta {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform .15s ease, background .15s ease, border-color .15s ease;
+  }
+  .btn-primary {
+    background: var(--text);
+    color: var(--bg);
+    font-weight: 500;
+  }
+  .btn-primary:hover { transform: translateY(-1px); }
+  .btn-ghost {
+    border: 1px solid var(--panel-line);
+    color: var(--text-muted);
+  }
+  .btn-ghost:hover { border-color: #3a4048; color: var(--text); }
+
+  /* Hero visual: two overlapping watch dials */
+  .hero-visual {
+    position: relative;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .dial-stack {
+    position: relative;
+    width: 220px;
+    height: 220px;
+  }
+  .dial {
+    position: absolute;
+    width: 190px;
+    height: 190px;
+    border-radius: 50%;
+    border: 1px solid var(--panel-line);
+    background: radial-gradient(circle at 32% 28%, #1b1f24, #0d0f12 72%);
+  }
+  .dial.d1 { top: 0; left: 0; box-shadow: 0 0 0 6px rgba(232,181,74,0.06); }
+  .dial.d2 { top: 46px; left: 46px; box-shadow: 0 0 0 6px rgba(218,53,64,0.08); }
+  .dial .crown {
+    position: absolute;
+    right: -7px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 26px;
+    background: #23272D;
+    border-radius: 3px;
+  }
+  .dial .tick {
+    position: absolute;
+    inset: 10px;
+    border-radius: 50%;
+  }
+  .dial.d1 .face-mark {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 60px; height: 60px;
+    margin: -30px 0 0 -30px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, var(--gold), #6b5220 78%);
+    box-shadow: 0 0 26px rgba(232,181,74,0.35);
+  }
+  .dial.d2 .face-mark {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 22px; height: 22px;
+    margin: -11px 0 0 -11px;
+    border-radius: 50%;
+    border: 3px solid var(--red);
+  }
+
+  /* Section shared */
+  section { padding: 60px 0; }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 34px;
+    border-top: 1px solid var(--panel-line);
+    padding-top: 26px;
+  }
+  .section-head h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0;
+  }
+  .section-head .count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  /* Watch face cards */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    border-radius: 18px;
+    padding: 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    transition: border-color .2s ease, transform .2s ease;
+  }
+  .card:hover {
+    border-color: #33393f;
+    transform: translateY(-3px);
+  }
+  .card-top {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+  .bezel {
+    flex-shrink: 0;
+    width: 128px;
+    height: 128px;
+    border-radius: 50%;
+    padding: 7px;
+    background: linear-gradient(145deg, #2a2f36, #101215);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .bezel::after {
+    content: "";
+    position: absolute;
+    right: -5px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 20px;
+    border-radius: 2px;
+    background: #2a2f36;
+  }
+  .bezel .screen {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #050607;
+  }
+  .bezel .screen img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .card-id {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .card-id .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--card-accent, var(--gold));
+  }
+  .card-id h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 21px;
+    font-weight: 600;
+    margin: 0;
+  }
+  .card-id p {
+    margin: 2px 0 0;
+    font-size: 13.5px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  .card-actions {
+    display: flex;
+    gap: 10px;
+    padding-top: 4px;
+    border-top: 1px solid var(--panel-line);
+    margin-top: 2px;
+  }
+  .card-actions a {
+    flex: 1;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    text-decoration: none;
+    padding: 11px 10px;
+    border-radius: 8px;
+    transition: background .15s ease, color .15s ease;
+  }
+  .card-actions .dl {
+    background: var(--card-accent, var(--gold));
+    color: #0B0D10;
+    font-weight: 500;
+  }
+  .card-actions .src {
+    border: 1px solid var(--panel-line);
+    color: var(--text-muted);
+  }
+  .card-actions .src:hover { color: var(--text); border-color: #3a4048; }
+
+  .card.eclipse { --card-accent: var(--gold); }
+  .card.nothing { --card-accent: var(--red); }
+
+  /* Install steps */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  .step {
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    border-radius: 14px;
+    padding: 20px 22px;
+  }
+  .step .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+  .step p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--text);
+  }
+  .step p code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    background: #1c2025;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--gold);
+  }
+
+  footer {
+    border-top: 1px solid var(--panel-line);
+    padding: 30px 0 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  footer a { text-decoration: none; }
+  footer a:hover { color: var(--text); }
+
+  @media (max-width: 760px) {
+    .hero { grid-template-columns: 1fr; padding: 60px 0 40px; }
+    .hero-visual { height: 220px; order: -1; }
+    .grid { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr; }
+    nav.top-nav a { margin-left: 16px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+
+  a:focus-visible, .btn:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="top-inner">
+      <div class="brand">WatchFaces4WOS <span>/ vpere</span></div>
+      <nav class="top-nav">
+        <a href="#faces">Faces</a>
+        <a href="#install">Install</a>
+        <a href="https://github.com/vpere/WatchFaces4WOS">Source</a>
+      </nav>
+    </div>
+  </header>
+
+  <section id="faces" style="padding-top: 60px;">
+    <div class="section-head" style="border-top: none; padding-top: 0;">
+      <h2>The faces</h2>
+      <div class="count">02 available</div>
+    </div>
+    <div class="grid">
+
+      <article class="card eclipse">
+        <div class="card-top">
+          <div class="bezel">
+            <div class="screen">
+              <img src="https://raw.githubusercontent.com/vpere/WatchFaces4WOS/main/Minimal%20Eclipse/MinimalEclipse.png" alt="Minimal Eclipse watch face preview" loading="lazy">
+            </div>
+          </div>
+          <div class="card-id">
+            <span class="tag">Minimal · Eclipse</span>
+            <h3>Minimal Eclipse</h3>
+            <p>A stripped-back dial built around a single glowing corona. Legible at a glance, calm the rest of the time.</p>
+          </div>
+        </div>
+        <div class="card-actions">
+          <a class="dl" href="https://github.com/vpere/WatchFaces4WOS/raw/main/Minimal%20Eclipse/minimaleclipse.apk">Download APK</a>
+          <a class="src" href="https://github.com/vpere/WatchFaces4WOS/tree/main/Minimal%20Eclipse">Folder</a>
+        </div>
+      </article>
+
+      <article class="card nothing">
+        <div class="card-top">
+          <div class="bezel">
+            <div class="screen">
+              <img src="https://raw.githubusercontent.com/vpere/WatchFaces4WOS/main/Nothing%20Inspired%20Watch%20Faces/NothingAnalogSimple.png" alt="Nothing Analog Simple watch face preview" loading="lazy">
+            </div>
+          </div>
+          <div class="card-id">
+            <span class="tag">Nothing · Analog</span>
+            <h3>Nothing Analog Simple</h3>
+            <p>Analog hands over a dot-matrix face, in the spirit of Nothing's transparent, utilitarian design language.</p>
+          </div>
+        </div>
+        <div class="card-actions">
+          <a class="dl" href="https://github.com/vpere/WatchFaces4WOS/raw/main/Nothing%20Inspired%20Watch%20Faces/nothinganalogsimple.apk">Download APK</a>
+          <a class="src" href="https://github.com/vpere/WatchFaces4WOS/tree/main/Nothing%20Inspired%20Watch%20Faces">Folder</a>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section id="install">
+    <div class="section-head">
+      <h2>Installing on your watch</h2>
+      <div class="count">manual sideload</div>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="num">01</div>
+        <p>Download the <code>.apk</code> for the face you want.</p>
+      </div>
+      <div class="step">
+        <div class="num">02</div>
+        <p>Connect your watch and run <code>adb install file.apk</code>.</p>
+      </div>
+      <div class="step">
+        <div class="num">03</div>
+        <p>Open the watch face picker on your watch and select it.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>WatchFaces4WOS — built for Wear OS</span>
+    <a href="https://github.com/vpere/WatchFaces4WOS">github.com/vpere/WatchFaces4WOS</a>
+  </footer>
+</div>
+
+</body>
+</html>
