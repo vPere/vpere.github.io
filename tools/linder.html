@@ -1,0 +1,885 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Triage — Systematic Review Card Sort</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,500&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #12141a;
+    --bg-alt: #191c24;
+    --surface: #1f232c;
+    --surface-2: #262b36;
+    --border: #2c313d;
+    --text: #ece8dc;
+    --text-muted: #9aa0af;
+    --text-faint: #5b6270;
+    --keep: #4f9d69;
+    --keep-glow: rgba(79,157,105,0.32);
+    --discard: #c1483f;
+    --discard-glow: rgba(193,72,63,0.32);
+    --super: #d4a73c;
+    --super-glow: rgba(212,167,60,0.36);
+    --radius: 14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1200px 600px at 50% -10%, #1a1e28 0%, var(--bg) 55%);
+    color:var(--text);
+    font-family:'Inter', system-ui, sans-serif;
+    min-height:100dvh;
+    display:flex;
+    flex-direction:column;
+    overscroll-behavior:none;
+  }
+  .display{ font-family:'Newsreader', serif; }
+  .mono{ font-family:'IBM Plex Mono', monospace; letter-spacing:0.02em; }
+
+  /* ---------- shell / header ---------- */
+  header{
+    padding:18px 20px 14px;
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    border-bottom:1px solid var(--border);
+    flex-shrink:0;
+  }
+  header .brand{ display:flex; align-items:baseline; gap:10px; }
+  header .brand .mark{
+    width:9px;height:9px;border-radius:50%;
+    background:var(--super);
+    box-shadow:0 0 10px var(--super-glow);
+    align-self:center;
+  }
+  header h1{
+    font-size:19px; font-weight:600; margin:0; letter-spacing:0.01em;
+  }
+  header .stat{
+    font-size:11.5px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em;
+  }
+  header .stat b{ color:var(--text); font-weight:600; }
+
+  main{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+    padding:20px 16px 24px;
+    max-width:640px;
+    width:100%;
+    margin:0 auto;
+    position:relative;
+  }
+  .screen{ width:100%; display:none; flex-direction:column; align-items:center; }
+  .screen.active{ display:flex; }
+
+  /* ---------- upload screen ---------- */
+  .intro{ text-align:center; margin:10px 0 28px; max-width:440px; }
+  .intro .eyebrow{ color:var(--super); font-size:11px; text-transform:uppercase; letter-spacing:0.14em; margin-bottom:10px; }
+  .intro h2{ font-size:26px; margin:0 0 10px; font-weight:500; }
+  .intro p{ color:var(--text-muted); font-size:14.5px; line-height:1.55; margin:0; }
+
+  .dropzone{
+    width:100%; max-width:440px;
+    border:1.5px dashed var(--border);
+    border-radius:var(--radius);
+    background:var(--surface);
+    padding:40px 24px;
+    text-align:center;
+    cursor:pointer;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .dropzone:hover, .dropzone.drag{ border-color:var(--super); background:var(--surface-2); }
+  .dropzone .stamp-icon{
+    width:52px;height:52px;margin:0 auto 16px;
+    border:2px solid var(--text-faint);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--text-faint);
+    font-size:20px;
+    transform:rotate(-8deg);
+  }
+  .dropzone strong{ display:block; font-size:15px; margin-bottom:4px; }
+  .dropzone span{ color:var(--text-muted); font-size:13px; }
+  input[type=file]{ display:none; }
+
+  .resume-banner{
+    width:100%; max-width:440px;
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:var(--radius); padding:14px 16px;
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:16px; gap:12px;
+  }
+  .resume-banner div{ font-size:13px; color:var(--text-muted); }
+  .resume-banner b{ color:var(--text); display:block; font-size:14px; margin-bottom:2px; }
+  .btn-row-inline{ display:flex; gap:8px; flex-shrink:0; }
+
+  .error-msg{
+    color:var(--discard); font-size:13px; margin-top:14px; text-align:center; max-width:440px;
+  }
+
+  /* ---------- swipe screen ---------- */
+  .progress-wrap{
+    width:100%; max-width:420px; margin-bottom:18px;
+  }
+  .progress-track{
+    height:3px; background:var(--border); border-radius:2px; overflow:hidden;
+  }
+  .progress-fill{
+    height:100%; background:var(--super); transition:width .2s ease;
+  }
+  .progress-labels{
+    display:flex; justify-content:space-between; margin-top:8px;
+    font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.06em;
+  }
+  .progress-labels .tally span{ margin-left:12px; }
+  .tally .n-keep{ color:var(--keep); }
+  .tally .n-super{ color:var(--super); }
+  .tally .n-discard{ color:var(--discard); }
+
+  .stack{
+    position:relative;
+    width:100%; max-width:420px;
+    height:min(58vh, 460px);
+    touch-action:none;
+  }
+  .card{
+    position:absolute; inset:0;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:22px 22px 18px;
+    display:flex;
+    flex-direction:column;
+    box-shadow:0 20px 40px -20px rgba(0,0,0,0.6);
+    user-select:none;
+    -webkit-user-select:none;
+    will-change:transform;
+  }
+  .card.behind{ z-index:1; }
+  .card.top{ z-index:2; cursor:grab; }
+  .card.top:active{ cursor:grabbing; }
+  .card .meta-row{
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:11px; color:var(--text-faint); margin-bottom:12px;
+  }
+  .card .kind{
+    text-transform:uppercase; letter-spacing:0.08em;
+  }
+  .card h3{
+    font-family:'Newsreader', serif;
+    font-size:21px; font-weight:500; line-height:1.28;
+    margin:0 0 8px;
+  }
+  .card .authors{
+    font-size:12.5px; color:var(--text-muted); margin-bottom:2px;
+  }
+  .card .venue{
+    font-size:12px; color:var(--text-faint); margin-bottom:14px; font-style:italic;
+  }
+  .card .abstract{
+    font-size:13.5px; line-height:1.6; color:var(--text);
+    overflow-y:auto; flex:1; padding-right:4px;
+    border-top:1px solid var(--border); padding-top:12px;
+  }
+  .card .abstract::-webkit-scrollbar{ width:4px; }
+  .card .abstract::-webkit-scrollbar-thumb{ background:var(--border); border-radius:2px; }
+  .card .abstract.empty{ color:var(--text-faint); font-style:italic; }
+
+  .stamp{
+    position:absolute; top:20px;
+    padding:6px 14px;
+    border:3px solid;
+    border-radius:8px;
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:600; font-size:15px; letter-spacing:0.12em;
+    text-transform:uppercase;
+    opacity:0; pointer-events:none;
+  }
+  .stamp.keep{ right:20px; border-color:var(--keep); color:var(--keep); transform:rotate(-10deg); }
+  .stamp.discard{ left:20px; border-color:var(--discard); color:var(--discard); transform:rotate(10deg); }
+  .stamp.super{ left:50%; top:14px; transform:translateX(-50%) rotate(-6deg); border-color:var(--super); color:var(--super); }
+
+  .actions{
+    display:flex; align-items:center; justify-content:center; gap:16px;
+    margin-top:22px;
+  }
+  .act-btn{
+    border:1px solid var(--border);
+    background:var(--surface);
+    color:var(--text);
+    width:52px; height:52px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:19px;
+    cursor:pointer;
+    transition:transform .1s ease, border-color .15s ease;
+  }
+  .act-btn:hover{ transform:translateY(-2px); }
+  .act-btn:active{ transform:translateY(0) scale(0.94); }
+  .act-btn.discard{ color:var(--discard); }
+  .act-btn.discard:hover{ border-color:var(--discard); }
+  .act-btn.keep{ color:var(--keep); }
+  .act-btn.keep:hover{ border-color:var(--keep); }
+  .act-btn.super{ width:60px; height:60px; font-size:22px; color:var(--super); }
+  .act-btn.super:hover{ border-color:var(--super); }
+  .act-btn.undo{ width:42px; height:42px; font-size:15px; color:var(--text-muted); }
+  .act-btn.undo:disabled{ opacity:0.3; cursor:default; }
+  .act-btn.undo:hover:not(:disabled){ border-color:var(--text-muted); }
+
+  .kbd-hint{
+    margin-top:18px; font-size:11px; color:var(--text-faint);
+    display:flex; gap:14px;
+  }
+  .kbd-hint kbd{
+    font-family:'IBM Plex Mono', monospace;
+    background:var(--surface-2); border:1px solid var(--border);
+    border-radius:4px; padding:1px 6px; margin-right:4px; font-size:10.5px;
+  }
+
+  /* ---------- summary screen ---------- */
+  .summary-card{
+    width:100%; max-width:420px;
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:var(--radius); padding:28px 26px; text-align:center;
+    margin-top:10px;
+  }
+  .summary-card .eyebrow{ color:var(--super); font-size:11px; text-transform:uppercase; letter-spacing:0.14em; margin-bottom:10px;}
+  .summary-card h2{ font-size:23px; font-weight:500; margin:0 0 22px; }
+  .summary-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:24px;
+  }
+  .summary-grid div{ padding:14px 6px; border-radius:10px; background:var(--bg-alt); border:1px solid var(--border); }
+  .summary-grid .num{ font-family:'IBM Plex Mono', monospace; font-size:22px; font-weight:600; display:block; }
+  .summary-grid .lbl{ font-size:10.5px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.06em; }
+  .summary-grid .keep .num{ color:var(--keep); }
+  .summary-grid .super .num{ color:var(--super); }
+  .summary-grid .discard .num{ color:var(--discard); }
+
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    padding:12px 20px; border-radius:9px; border:1px solid var(--border);
+    background:var(--surface-2); color:var(--text); font-size:14px; font-weight:500;
+    cursor:pointer; font-family:inherit; text-decoration:none;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .btn:hover{ border-color:var(--text-muted); }
+  .btn.primary{ background:var(--super); border-color:var(--super); color:#1a1608; font-weight:600; }
+  .btn.primary:hover{ filter:brightness(1.08); }
+  .btn.ghost{ background:transparent; }
+  .btn-stack{ display:flex; flex-direction:column; gap:10px; }
+
+  footer{
+    text-align:center; padding:14px; font-size:11px; color:var(--text-faint);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .card, .stamp, .progress-fill{ transition:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="mark"></div>
+      <h1>Linder</h1> - <i>Like the famous dating app but for literature review</i>
+    </div>
+  <div class="stat" id="headerStat">no collection loaded</div>
+</header>
+
+<main>
+
+  <!-- SCREEN 1: upload -->
+  <section class="screen active" id="screen-upload">
+    <div class="intro">
+      <div class="eyebrow">Systematic Review · Initial Screening</div>
+      <h2 class="display">Sort your collection<br>by title and abstract</h2>
+      <p>Export your Zotero collection as a CSV, load it below, then swipe right to keep, left to discard, and up to star a paper as a priority read. Everything runs locally in this browser tab — nothing is uploaded anywhere.</p>
+    </div>
+
+    <div id="resumeBanner" class="resume-banner" style="display:none;">
+      <div>
+        <b>Unfinished session found</b>
+        <span id="resumeDetail">—</span>
+      </div>
+      <div class="btn-row-inline">
+        <button class="btn primary" id="resumeBtn">Resume</button>
+        <button class="btn ghost" id="discardResumeBtn">Discard</button>
+      </div>
+    </div>
+
+    <label class="dropzone" id="dropzone" for="fileInput">
+      <div class="stamp-icon">↑</div>
+      <strong>Drop your Zotero CSV here</strong>
+      <span>or tap to browse · exported via File → Export Library / Export Collection → CSV</span>
+    </label>
+    <input type="file" id="fileInput" accept=".csv,text/csv">
+    <div class="error-msg" id="errorMsg" style="display:none;"></div>
+  </section>
+
+  <!-- SCREEN 2: swipe -->
+  <section class="screen" id="screen-swipe">
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      <div class="progress-labels">
+        <span id="progressCount">0 / 0</span>
+        <span class="tally">
+          <span class="n-keep" id="tallyKeep">✓ 0</span>
+          <span class="n-super" id="tallySuper">★ 0</span>
+          <span class="n-discard" id="tallyDiscard">✕ 0</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="stack" id="stack"></div>
+
+    <div class="actions">
+      <button class="act-btn undo" id="btnUndo" title="Undo (Z)" disabled>↺</button>
+      <button class="act-btn discard" id="btnDiscard" title="Discard (←)">✕</button>
+      <button class="act-btn super" id="btnSuper" title="Star / super-like (↑)">★</button>
+      <button class="act-btn keep" id="btnKeep" title="Keep (→)">✓</button>
+      <button class="act-btn" id="btnSave" title="Export Now (E)">💾</button>
+    </div>
+    <div class="kbd-hint">
+      <span><kbd>←</kbd>discard</span>
+      <span><kbd>↑</kbd>star</span>
+      <span><kbd>→</kbd>keep</span>
+      <span><kbd>Z</kbd>undo</span>
+      <span><kbd>E</kbd>export</span>
+    </div>
+  </section>
+
+  <!-- SCREEN 3: summary -->
+  <section class="screen" id="screen-summary">
+    <div class="summary-card">
+      <div class="eyebrow">Triage Complete</div>
+      <h2 class="display">Every paper sorted</h2>
+      <div class="summary-grid">
+        <div class="keep"><span class="num mono" id="sumKeep">0</span><span class="lbl">Kept</span></div>
+        <div class="super"><span class="num mono" id="sumSuper">0</span><span class="lbl">Starred</span></div>
+        <div class="discard"><span class="num mono" id="sumDiscard">0</span><span class="lbl">Discarded</span></div>
+      </div>
+      <div class="btn-stack">
+        <button class="btn primary" id="exportBtn">Export CSV for Zotero import</button>
+        <button class="btn ghost" id="reviewSuperBtn">Review starred titles</button>
+        <button class="btn ghost" id="startOverBtn">Start a new collection</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>Runs entirely client-side · progress autosaved to this browser</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------------- CSV parsing / writing (RFC4180-ish) ---------------- */
+  function parseCSV(text){
+    // strip BOM
+    if(text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+    const rows = [];
+    let field = "", row = [], inQuotes = false;
+    let i = 0;
+    const n = text.length;
+    while(i < n){
+      const c = text[i];
+      if(inQuotes){
+        if(c === '"'){
+          if(text[i+1] === '"'){ field += '"'; i += 2; continue; }
+          inQuotes = false; i++; continue;
+        }
+        field += c; i++; continue;
+      } else {
+        if(c === '"'){ inQuotes = true; i++; continue; }
+        if(c === ','){ row.push(field); field = ""; i++; continue; }
+        if(c === '\r'){ i++; continue; }
+        if(c === '\n'){
+          row.push(field); field = "";
+          rows.push(row); row = [];
+          i++; continue;
+        }
+        field += c; i++; continue;
+      }
+    }
+    // last field/row
+    if(field.length > 0 || row.length > 0){ row.push(field); rows.push(row); }
+    // drop fully empty trailing rows
+    while(rows.length && rows[rows.length-1].length === 1 && rows[rows.length-1][0] === ""){ rows.pop(); }
+    if(rows.length === 0) return { headers: [], records: [] };
+    const headers = rows[0];
+    const records = rows.slice(1).filter(r => !(r.length === 1 && r[0] === "")).map(r => {
+      const obj = {};
+      headers.forEach((h, idx) => { obj[h] = r[idx] !== undefined ? r[idx] : ""; });
+      return obj;
+    });
+    return { headers, records };
+  }
+
+  function csvEscape(val){
+    val = (val === undefined || val === null) ? "" : String(val);
+    if(/[",\n\r]/.test(val)){
+      return '"' + val.replace(/"/g, '""') + '"';
+    }
+    return val;
+  }
+
+  function writeCSV(headers, records){
+    const lines = [headers.map(csvEscape).join(",")];
+    records.forEach(rec => {
+      lines.push(headers.map(h => csvEscape(rec[h])).join(","));
+    });
+    return lines.join("\r\n");
+  }
+
+  /* ---------------- column detection (Zotero export headers vary slightly) ---------------- */
+  function findHeader(headers, candidates){
+    for(const cand of candidates){
+      const hit = headers.find(h => h.trim().toLowerCase() === cand.toLowerCase());
+      if(hit) return hit;
+    }
+    return null;
+  }
+
+  const COLS = {
+    title: ["Title"],
+    abstract: ["Abstract Note", "Abstract"],
+    author: ["Author", "Creator"],
+    year: ["Publication Year", "Date", "Year"],
+    venue: ["Publication Title", "Journal Abbreviation", "Proceedings Title"],
+    itemType: ["Item Type"],
+    tags: ["Manual Tags", "Tags"],
+    key: ["Key"]
+  };
+
+  /* ---------------- app state ---------------- */
+  let headers = [];
+  let records = [];      // full parsed rows, in original order
+  let colMap = {};        // resolved column names
+  let order = [];         // indices into records, the deck order (stable = file order)
+  let cursor = 0;          // pointer into order[]
+  let decisions = {};     // recordIndex -> 'keep' | 'discard' | 'super'
+  let history = [];        // stack of recordIndex, for undo
+  let sessionKey = null;
+  let fileName = "collection";
+  const SUPER_TAG = "super-like";
+
+  const el = id => document.getElementById(id);
+  const screens = {
+    upload: el('screen-upload'),
+    swipe: el('screen-swipe'),
+    summary: el('screen-summary')
+  };
+  function showScreen(name){
+    Object.values(screens).forEach(s => s.classList.remove('active'));
+    screens[name].classList.add('active');
+  }
+
+  function hashString(str){
+    let h = 0;
+    for(let i=0;i<str.length;i++){ h = (Math.imul(31,h) + str.charCodeAt(i))|0; }
+    return (h>>>0).toString(36);
+  }
+
+  function storageKeyFor(text, name){
+    return "slr-triage:" + name + ":" + hashString(text.slice(0,2000) + text.length);
+  }
+
+  function saveProgress(){
+    if(!sessionKey) return;
+    try{
+      localStorage.setItem(sessionKey, JSON.stringify({
+        fileName, headers, records, decisions, cursor, order, savedAt: Date.now()
+      }));
+    }catch(e){ /* storage full or blocked — fail silently, in-memory state still works */ }
+  }
+
+  function clearProgress(){
+    if(sessionKey){ try{ localStorage.removeItem(sessionKey); }catch(e){} }
+  }
+
+  function findAnySession(){
+    try{
+      for(let i=0;i<localStorage.length;i++){
+        const k = localStorage.key(i);
+        if(k && k.startsWith("slr-triage:")) return k;
+      }
+    }catch(e){}
+    return null;
+  }
+
+  /* ---------------- loading a file ---------------- */
+  function loadFromText(text, name){
+    const parsed = parseCSV(text);
+    if(!parsed.headers.length || !parsed.records.length){
+      showError("Could not find any rows in that file. Make sure you exported the collection as CSV from Zotero (right-click the collection → Export Collection… → CSV).");
+      return;
+    }
+    const titleCol = findHeader(parsed.headers, COLS.title);
+    if(!titleCol){
+      showError("This CSV doesn't have a Title column — is it a Zotero export?");
+      return;
+    }
+    headers = parsed.headers;
+    records = parsed.records;
+    colMap = {
+      title: titleCol,
+      abstract: findHeader(headers, COLS.abstract),
+      author: findHeader(headers, COLS.author),
+      year: findHeader(headers, COLS.year),
+      venue: findHeader(headers, COLS.venue),
+      itemType: findHeader(headers, COLS.itemType),
+      tags: findHeader(headers, COLS.tags),
+      key: findHeader(headers, COLS.key)
+    };
+    if(!colMap.tags){
+      colMap.tags = "Manual Tags";
+      headers = headers.concat([colMap.tags]);
+    }
+    fileName = name.replace(/\.csv$/i, "");
+    sessionKey = storageKeyFor(text, fileName);
+    decisions = {};
+    history = [];
+    order = records.map((_, idx) => idx);
+    cursor = 0;
+    hideError();
+    saveProgress();
+    enterSwipe();
+  }
+
+  function showError(msg){
+    const e = el('errorMsg'); e.textContent = msg; e.style.display = 'block';
+  }
+  function hideError(){ el('errorMsg').style.display = 'none'; }
+
+  function restoreSession(raw){
+    try{
+      const data = JSON.parse(raw);
+      headers = data.headers; records = data.records; decisions = data.decisions;
+      cursor = data.cursor; order = data.order; fileName = data.fileName;
+      const titleCol = findHeader(headers, COLS.title);
+      colMap = {
+        title: titleCol,
+        abstract: findHeader(headers, COLS.abstract),
+        author: findHeader(headers, COLS.author),
+        year: findHeader(headers, COLS.year),
+        venue: findHeader(headers, COLS.venue),
+        itemType: findHeader(headers, COLS.itemType),
+        tags: findHeader(headers, COLS.tags) || "Manual Tags",
+        key: findHeader(headers, COLS.key)
+      };
+      history = order.slice(0, cursor).filter(idx => decisions[idx] !== undefined);
+      enterSwipe();
+    }catch(e){
+      showError("Couldn't restore the saved session — starting fresh.");
+    }
+  }
+
+  /* ---------------- swipe screen ---------------- */
+  function updateHeaderStat(){
+    el('headerStat').textContent = fileName ? (records.length + " items · " + fileName) : "no collection loaded";
+  }
+
+  function tallies(){
+    let k=0, s=0, d=0;
+    Object.values(decisions).forEach(v => { if(v==='keep')k++; else if(v==='super')s++; else if(v==='discard')d++; });
+    return {k,s,d};
+  }
+
+  function updateProgressUI(){
+    const total = order.length;
+    const done = Object.keys(decisions).length;
+    el('progressCount').textContent = done + " / " + total;
+    el('progressFill').style.width = (total? (done/total*100):0) + "%";
+    const t = tallies();
+    el('tallyKeep').textContent = "✓ " + t.k;
+    el('tallySuper').textContent = "★ " + t.s;
+    el('tallyDiscard').textContent = "✕ " + t.d;
+    el('btnUndo').disabled = history.length === 0;
+    updateHeaderStat();
+  }
+
+  function recordFieldSafe(rec, col, fallback){
+    if(!col) return fallback || "";
+    const v = rec[col];
+    return (v === undefined || v === null || v === "") ? (fallback || "") : v;
+  }
+
+  function cardHTML(recIdx, cls){
+    const rec = records[recIdx];
+    const title = recordFieldSafe(rec, colMap.title, "Untitled item");
+    const abs = recordFieldSafe(rec, colMap.abstract, "");
+    const author = recordFieldSafe(rec, colMap.author, "");
+    const year = recordFieldSafe(rec, colMap.year, "");
+    const venue = recordFieldSafe(rec, colMap.venue, "");
+    const itemType = recordFieldSafe(rec, colMap.itemType, "item");
+    const div = document.createElement('div');
+    div.className = 'card ' + cls;
+    div.dataset.recIdx = recIdx;
+    div.innerHTML =
+      '<div class="meta-row"><span class="kind mono">' + escapeHtml(itemType) + '</span><span class="mono">' + escapeHtml(year) + '</span></div>' +
+      '<h3>' + escapeHtml(title) + '</h3>' +
+      (author ? '<div class="authors">' + escapeHtml(truncate(author,120)) + '</div>' : '') +
+      (venue ? '<div class="venue">' + escapeHtml(venue) + '</div>' : '') +
+      '<div class="abstract' + (abs? '' : ' empty') + '">' + (abs ? escapeHtml(abs) : 'No abstract available for this item.') + '</div>' +
+      '<div class="stamp discard mono">discard</div>' +
+      '<div class="stamp keep mono">keep</div>' +
+      '<div class="stamp super mono">★ star</div>';
+    return div;
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+  function truncate(s, n){ return s.length > n ? s.slice(0,n-1) + "…" : s; }
+
+  function renderStack(){
+    const stack = el('stack');
+    stack.innerHTML = "";
+    if(cursor >= order.length){
+      enterSummary();
+      return;
+    }
+    // render up to 2 cards behind for depth, top card interactive
+    const behindIdx = order[cursor+1];
+    if(behindIdx !== undefined){
+      const behind = cardHTML(behindIdx, 'behind');
+      behind.style.transform = 'scale(0.96) translateY(10px)';
+      behind.style.opacity = '0.7';
+      stack.appendChild(behind);
+    }
+    const topIdx = order[cursor];
+    const top = cardHTML(topIdx, 'top');
+    stack.appendChild(top);
+    attachDrag(top);
+    updateProgressUI();
+  }
+
+  function enterSwipe(){
+    showScreen('swipe');
+    renderStack();
+  }
+
+  /* ---------------- drag / swipe physics ---------------- */
+  const SWIPE_THRESHOLD_X = 110;
+  const SWIPE_THRESHOLD_Y = 90;
+
+  function attachDrag(cardEl){
+    let startX=0, startY=0, dx=0, dy=0, dragging=false;
+    const stampDiscard = cardEl.querySelector('.stamp.discard');
+    const stampKeep = cardEl.querySelector('.stamp.keep');
+    const stampSuper = cardEl.querySelector('.stamp.super');
+
+    function onDown(e){
+      dragging = true;
+      const p = point(e);
+      startX = p.x; startY = p.y;
+      cardEl.style.transition = 'none';
+    }
+    function onMove(e){
+      if(!dragging) return;
+      const p = point(e);
+      dx = p.x - startX; dy = p.y - startY;
+      const rot = dx / 18;
+      cardEl.style.transform = 'translate(' + dx + 'px,' + dy + 'px) rotate(' + rot + 'deg)';
+      const upIntent = (dy < -20 && Math.abs(dy) > Math.abs(dx)*1.1);
+      if(upIntent){
+        stampSuper.style.opacity = Math.min(Math.abs(dy)/SWIPE_THRESHOLD_Y, 1);
+        stampKeep.style.opacity = 0; stampDiscard.style.opacity = 0;
+      } else if(dx > 0){
+        stampKeep.style.opacity = Math.min(dx/SWIPE_THRESHOLD_X, 1);
+        stampDiscard.style.opacity = 0; stampSuper.style.opacity = 0;
+      } else {
+        stampDiscard.style.opacity = Math.min(-dx/SWIPE_THRESHOLD_X, 1);
+        stampKeep.style.opacity = 0; stampSuper.style.opacity = 0;
+      }
+    }
+    function onUp(){
+      if(!dragging) return;
+      dragging = false;
+      cardEl.style.transition = 'transform .25s ease';
+      const upIntent = (dy < -SWIPE_THRESHOLD_Y && Math.abs(dy) > Math.abs(dx)*1.1);
+      if(upIntent){
+        commit('super', cardEl, 0, -600);
+      } else if(dx > SWIPE_THRESHOLD_X){
+        commit('keep', cardEl, 700, dy);
+      } else if(dx < -SWIPE_THRESHOLD_X){
+        commit('discard', cardEl, -700, dy);
+      } else {
+        cardEl.style.transform = 'translate(0,0) rotate(0)';
+        stampDiscard.style.opacity = 0; stampKeep.style.opacity = 0; stampSuper.style.opacity = 0;
+      }
+    }
+    function point(e){
+      if(e.touches && e.touches[0]) return {x:e.touches[0].clientX, y:e.touches[0].clientY};
+      return {x:e.clientX, y:e.clientY};
+    }
+    cardEl.addEventListener('pointerdown', onDown);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+    cardEl._cleanup = () => {
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+    };
+  }
+
+  function commit(decision, cardEl, flyX, flyY){
+    const recIdx = order[cursor];
+    cardEl.style.transform = 'translate(' + flyX + 'px,' + flyY + 'px) rotate(' + (flyX/14) + 'deg)';
+    cardEl.style.opacity = '0';
+    decisions[recIdx] = decision;
+    history.push(recIdx);
+    cursor++;
+    saveProgress();
+    if(cardEl._cleanup) cardEl._cleanup();
+    setTimeout(renderStack, 180);
+  }
+
+  function programmaticSwipe(decision){
+    const top = document.querySelector('.card.top');
+    if(!top) return;
+    if(decision === 'keep') commit('keep', top, 700, 0);
+    else if(decision === 'discard') commit('discard', top, -700, 0);
+    else commit('super', top, 0, -600);
+  }
+
+  function undo(){
+    if(history.length === 0) return;
+    const recIdx = history.pop();
+    delete decisions[recIdx];
+    cursor--;
+    saveProgress();
+    renderStack();
+  }
+
+  /* ---------------- summary / export ---------------- */
+  function enterSummary(){
+    showScreen('summary');
+    const t = tallies();
+    el('sumKeep').textContent = t.k;
+    el('sumSuper').textContent = t.s;
+    el('sumDiscard').textContent = t.d;
+  }
+
+  function buildExportRecords(){
+    const kept = [];
+    order.forEach(idx => {
+      const d = decisions[idx];
+      if(d === 'keep' || d === 'super'){
+        const rec = Object.assign({}, records[idx]);
+        if(d === 'super'){
+          const existing = (rec[colMap.tags] || "").trim();
+          const tagsArr = existing ? existing.split(';').map(s=>s.trim()).filter(Boolean) : [];
+          if(!tagsArr.includes(SUPER_TAG)) tagsArr.push(SUPER_TAG);
+          rec[colMap.tags] = tagsArr.join('; ');
+        } else if(rec[colMap.tags] === undefined){
+          rec[colMap.tags] = "";
+        }
+        kept.push(rec);
+      }
+    });
+    return kept;
+  }
+
+  function doExport(){
+    const kept = buildExportRecords();
+    const csv = writeCSV(headers, kept);
+    const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName + '-triaged.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  }
+
+  function reviewStarred(){
+    const t = tallies();
+    if(t.s === 0){ alert('No starred papers yet.'); return; }
+    const titles = order
+      .filter(idx => decisions[idx] === 'super')
+      .map(idx => '★ ' + recordFieldSafe(records[idx], colMap.title, 'Untitled'));
+    alert(titles.join('\n'));
+  }
+
+  function startOver(){
+    clearProgress();
+    headers=[]; records=[]; order=[]; decisions={}; history=[]; cursor=0; sessionKey=null; fileName='collection';
+    el('fileInput').value = '';
+    updateHeaderStat();
+    showScreen('upload');
+    checkResumable();
+  }
+
+  /* ---------------- wiring ---------------- */
+  el('fileInput').addEventListener('change', e => {
+    const f = e.target.files[0];
+    if(!f) return;
+    const reader = new FileReader();
+    reader.onload = () => loadFromText(reader.result, f.name);
+    reader.readAsText(f);
+  });
+
+  const dz = el('dropzone');
+  ['dragenter','dragover'].forEach(evt => dz.addEventListener(evt, e => { e.preventDefault(); dz.classList.add('drag'); }));
+  ['dragleave','drop'].forEach(evt => dz.addEventListener(evt, e => { e.preventDefault(); dz.classList.remove('drag'); }));
+  dz.addEventListener('drop', e => {
+    const f = e.dataTransfer.files[0];
+    if(!f) return;
+    const reader = new FileReader();
+    reader.onload = () => loadFromText(reader.result, f.name);
+    reader.readAsText(f);
+  });
+
+  el('btnDiscard').addEventListener('click', () => programmaticSwipe('discard'));
+  el('btnKeep').addEventListener('click', () => programmaticSwipe('keep'));
+  el('btnSuper').addEventListener('click', () => programmaticSwipe('super'));
+  el('btnUndo').addEventListener('click', undo);
+  el('btnSave').addEventListener('click', doExport);
+  el('exportBtn').addEventListener('click', doExport);
+  el('reviewSuperBtn').addEventListener('click', reviewStarred);
+  el('startOverBtn').addEventListener('click', startOver);
+
+  document.addEventListener('keydown', e => {
+    if(!screens.swipe.classList.contains('active')) return;
+    if(e.key === 'ArrowLeft'){ programmaticSwipe('discard'); }
+    else if(e.key === 'ArrowRight'){ programmaticSwipe('keep'); }
+    else if(e.key === 'ArrowUp'){ e.preventDefault(); programmaticSwipe('super'); }
+    else if(e.key.toLowerCase() === 'z'){ undo(); }
+    else if(e.key.toLowerCase() === 'e'){ doExport(); }
+  });
+
+  function checkResumable(){
+    const key = findAnySession();
+    if(key){
+      try{
+        const data = JSON.parse(localStorage.getItem(key));
+        const done = Object.keys(data.decisions||{}).length;
+        const total = (data.order||[]).length;
+        el('resumeDetail').textContent = data.fileName + ' — ' + done + ' / ' + total + ' sorted';
+        el('resumeBanner').style.display = 'flex';
+        el('resumeBtn').onclick = () => { restoreSession(localStorage.getItem(key)); };
+        el('discardResumeBtn').onclick = () => { localStorage.removeItem(key); el('resumeBanner').style.display = 'none'; };
+      }catch(e){
+        el('resumeBanner').style.display = 'none';
+      }
+    }
+  }
+
+  updateHeaderStat();
+  checkResumable();
+})();
+</script>
+</body>
+</html>
