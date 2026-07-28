@@ -275,6 +275,7 @@
   .btn.primary:hover{ filter:brightness(1.08); }
   .btn.ghost{ background:transparent; }
   .btn-stack{ display:flex; flex-direction:column; gap:10px; }
+  .fmt-note{ font-size:11px; color:var(--text-faint); margin-top:-4px; margin-bottom:4px; }
 
   footer{
     text-align:center; padding:14px; font-size:11px; color:var(--text-faint);
@@ -301,7 +302,7 @@
     <div class="intro">
       <div class="eyebrow"><i>Like the famous dating app but for literature review</i></div>
       <h2 class="display">Sort your collection by title and abstract</h2>
-      <p>Export your Zotero collection as a CSV, load it below, then swipe right to keep, left to discard, and up to star a paper as a priority read. Everything runs locally in this browser tab — nothing is uploaded anywhere.</p>
+      <p>Export your Zotero collection as a CSV, load it below, then swipe right to keep, left to discard, and up to star a paper as a priority read. At the end, export an RIS file — Zotero can import that directly with your tags applied. Everything runs locally in this browser tab — nothing is uploaded anywhere.</p>
     </div>
 
     <div id="resumeBanner" class="resume-banner" style="display:none;">
@@ -345,7 +346,7 @@
       <button class="act-btn discard" id="btnDiscard" title="Discard (←)">✕</button>
       <button class="act-btn super" id="btnSuper" title="Star / super-like (↑)">★</button>
       <button class="act-btn keep" id="btnKeep" title="Keep (→)">✓</button>
-      <button class="act-btn" id="btnSave" title="Export Now (E)">💾</button>
+      <button class="act-btn" id="btnSave" title="Export RIS for Zotero (E)">💾</button>
     </div>
     <div class="kbd-hint">
       <span><kbd>←</kbd>discard</span>
@@ -367,7 +368,9 @@
         <div class="discard"><span class="num mono" id="sumDiscard">0</span><span class="lbl">Discarded</span></div>
       </div>
       <div class="btn-stack">
-        <button class="btn primary" id="exportBtn">Export CSV for Zotero import</button>
+        <button class="btn primary" id="exportRisBtn">Export RIS for Zotero import</button>
+        <div class="fmt-note">RIS is the format Zotero actually imports — starred items get a "super-like" tag.</div>
+        <button class="btn ghost" id="exportCsvBtn">Export CSV (spreadsheet backup)</button>
         <button class="btn ghost" id="reviewSuperBtn">Review starred titles</button>
         <button class="btn ghost" id="startOverBtn">Start a new collection</button>
       </div>
@@ -440,6 +443,54 @@
     return lines.join("\r\n");
   }
 
+  /* ---------------- RIS writing (Zotero-importable) ---------------- */
+  const RIS_TYPE_MAP = {
+    journalArticle:'JOUR', conferencePaper:'CONF', book:'BOOK', bookSection:'CHAP',
+    thesis:'THES', report:'RPRT', webpage:'ELEC', manuscript:'MANSCPT', preprint:'UNPD',
+    magazineArticle:'MGZN', newspaperArticle:'NEWS', patent:'PAT', case:'CASE',
+    statute:'STAT', presentation:'CONF', dataset:'DATA', document:'GEN', letter:'GEN'
+  };
+  function risTypeFor(itemType){
+    return RIS_TYPE_MAP[itemType] || 'GEN';
+  }
+  function risEscapeLine(val){
+    return String(val).replace(/\r?\n/g, ' ').trim();
+  }
+  function writeRIS(recs){
+    const lines = [];
+    recs.forEach(rec => {
+      const itemType = recordFieldSafe(rec, colMap.itemType, "");
+      lines.push('TY  - ' + risTypeFor(itemType));
+      const title = recordFieldSafe(rec, colMap.title, "");
+      if(title) lines.push('TI  - ' + risEscapeLine(title));
+      const author = recordFieldSafe(rec, colMap.author, "");
+      if(author){
+        author.split(/;\s*/).map(s=>s.trim()).filter(Boolean).forEach(a => lines.push('AU  - ' + risEscapeLine(a)));
+      }
+      const abs = recordFieldSafe(rec, colMap.abstract, "");
+      if(abs) lines.push('AB  - ' + risEscapeLine(abs));
+      const year = recordFieldSafe(rec, colMap.year, "");
+      const yearMatch = String(year).match(/\d{4}/);
+      if(yearMatch) lines.push('PY  - ' + yearMatch[0]);
+      const venue = recordFieldSafe(rec, colMap.venue, "");
+      if(venue) lines.push('JO  - ' + risEscapeLine(venue));
+      if(colMap.publisher){ const p = recordFieldSafe(rec, colMap.publisher, ""); if(p) lines.push('PB  - ' + risEscapeLine(p)); }
+      if(colMap.volume){ const v = recordFieldSafe(rec, colMap.volume, ""); if(v) lines.push('VL  - ' + risEscapeLine(v)); }
+      if(colMap.issue){ const i2 = recordFieldSafe(rec, colMap.issue, ""); if(i2) lines.push('IS  - ' + risEscapeLine(i2)); }
+      if(colMap.pages){ const pg = recordFieldSafe(rec, colMap.pages, ""); if(pg) lines.push('SP  - ' + risEscapeLine(pg)); }
+      if(colMap.doi){ const d = recordFieldSafe(rec, colMap.doi, ""); if(d) lines.push('DO  - ' + risEscapeLine(d)); }
+      if(colMap.url){ const u = recordFieldSafe(rec, colMap.url, ""); if(u) lines.push('UR  - ' + risEscapeLine(u)); }
+      if(colMap.isbn){ const isbn = recordFieldSafe(rec, colMap.isbn, ""); if(isbn) lines.push('SN  - ' + risEscapeLine(isbn)); }
+      const tags = recordFieldSafe(rec, colMap.tags, "");
+      if(tags){
+        tags.split(/;\s*/).map(s=>s.trim()).filter(Boolean).forEach(t => lines.push('KW  - ' + risEscapeLine(t)));
+      }
+      lines.push('ER  - ');
+      lines.push('');
+    });
+    return lines.join('\r\n');
+  }
+
   /* ---------------- column detection (Zotero export headers vary slightly) ---------------- */
   function findHeader(headers, candidates){
     for(const cand of candidates){
@@ -457,7 +508,14 @@
     venue: ["Publication Title", "Journal Abbreviation", "Proceedings Title"],
     itemType: ["Item Type"],
     tags: ["Manual Tags", "Tags"],
-    key: ["Key"]
+    key: ["Key"],
+    doi: ["DOI"],
+    url: ["Url", "URL"],
+    pages: ["Pages"],
+    volume: ["Volume"],
+    issue: ["Issue"],
+    isbn: ["ISBN"],
+    publisher: ["Publisher"]
   };
 
   /* ---------------- app state ---------------- */
@@ -516,6 +574,26 @@
     return null;
   }
 
+  function buildColMap(hdrs){
+    return {
+      title: findHeader(hdrs, COLS.title),
+      abstract: findHeader(hdrs, COLS.abstract),
+      author: findHeader(hdrs, COLS.author),
+      year: findHeader(hdrs, COLS.year),
+      venue: findHeader(hdrs, COLS.venue),
+      itemType: findHeader(hdrs, COLS.itemType),
+      tags: findHeader(hdrs, COLS.tags),
+      key: findHeader(hdrs, COLS.key),
+      doi: findHeader(hdrs, COLS.doi),
+      url: findHeader(hdrs, COLS.url),
+      pages: findHeader(hdrs, COLS.pages),
+      volume: findHeader(hdrs, COLS.volume),
+      issue: findHeader(hdrs, COLS.issue),
+      isbn: findHeader(hdrs, COLS.isbn),
+      publisher: findHeader(hdrs, COLS.publisher)
+    };
+  }
+
   /* ---------------- loading a file ---------------- */
   function loadFromText(text, name){
     const parsed = parseCSV(text);
@@ -530,16 +608,8 @@
     }
     headers = parsed.headers;
     records = parsed.records;
-    colMap = {
-      title: titleCol,
-      abstract: findHeader(headers, COLS.abstract),
-      author: findHeader(headers, COLS.author),
-      year: findHeader(headers, COLS.year),
-      venue: findHeader(headers, COLS.venue),
-      itemType: findHeader(headers, COLS.itemType),
-      tags: findHeader(headers, COLS.tags),
-      key: findHeader(headers, COLS.key)
-    };
+    colMap = buildColMap(headers);
+    colMap.title = titleCol;
     if(!colMap.tags){
       colMap.tags = "Manual Tags";
       headers = headers.concat([colMap.tags]);
@@ -565,17 +635,8 @@
       const data = JSON.parse(raw);
       headers = data.headers; records = data.records; decisions = data.decisions;
       cursor = data.cursor; order = data.order; fileName = data.fileName;
-      const titleCol = findHeader(headers, COLS.title);
-      colMap = {
-        title: titleCol,
-        abstract: findHeader(headers, COLS.abstract),
-        author: findHeader(headers, COLS.author),
-        year: findHeader(headers, COLS.year),
-        venue: findHeader(headers, COLS.venue),
-        itemType: findHeader(headers, COLS.itemType),
-        tags: findHeader(headers, COLS.tags) || "Manual Tags",
-        key: findHeader(headers, COLS.key)
-      };
+      colMap = buildColMap(headers);
+      if(!colMap.tags) colMap.tags = "Manual Tags";
       history = order.slice(0, cursor).filter(idx => decisions[idx] !== undefined);
       enterSwipe();
     }catch(e){
@@ -789,18 +850,28 @@
     return kept;
   }
 
-  function doExport(){
-    const kept = buildExportRecords();
-    const csv = writeCSV(headers, kept);
-    const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  function triggerDownload(content, mime, filename){
+    const blob = new Blob([content], {type: mime});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = fileName + '-triaged.csv';
+    a.download = filename;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     setTimeout(() => URL.revokeObjectURL(url), 2000);
+  }
+
+  function doExportCSV(){
+    const kept = buildExportRecords();
+    const csv = writeCSV(headers, kept);
+    triggerDownload(csv, 'text/csv;charset=utf-8;', fileName + '-triaged.csv');
+  }
+
+  function doExportRIS(){
+    const kept = buildExportRecords();
+    const ris = writeRIS(kept);
+    triggerDownload(ris, 'application/x-research-info-systems;charset=utf-8;', fileName + '-triaged.ris');
   }
 
   function reviewStarred(){
@@ -845,8 +916,9 @@
   el('btnKeep').addEventListener('click', () => programmaticSwipe('keep'));
   el('btnSuper').addEventListener('click', () => programmaticSwipe('super'));
   el('btnUndo').addEventListener('click', undo);
-  el('btnSave').addEventListener('click', doExport);
-  el('exportBtn').addEventListener('click', doExport);
+  el('btnSave').addEventListener('click', doExportRIS);
+  el('exportRisBtn').addEventListener('click', doExportRIS);
+  el('exportCsvBtn').addEventListener('click', doExportCSV);
   el('reviewSuperBtn').addEventListener('click', reviewStarred);
   el('startOverBtn').addEventListener('click', startOver);
 
@@ -856,7 +928,7 @@
     else if(e.key === 'ArrowRight'){ programmaticSwipe('keep'); }
     else if(e.key === 'ArrowUp'){ e.preventDefault(); programmaticSwipe('super'); }
     else if(e.key.toLowerCase() === 'z'){ undo(); }
-    else if(e.key.toLowerCase() === 'e'){ doExport(); }
+    else if(e.key.toLowerCase() === 'e'){ doExportRIS(); }
   });
 
   function checkResumable(){
