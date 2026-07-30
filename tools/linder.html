@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Linder — Systematic Literature Review</title>
+<title>Triage — Systematic Review Card Sort</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,500&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
@@ -947,6 +947,20 @@
       }
     }
   }
+
+  // Ask the browser not to evict our localStorage under storage pressure.
+  // (Best-effort; unsupported or denied silently on many mobile browsers, but free to try.)
+  if(navigator.storage && navigator.storage.persist){
+    navigator.storage.persist().catch(()=>{});
+  }
+
+  // Belt-and-suspenders: force a save whenever the tab is about to be
+  // backgrounded/killed, in addition to the existing per-swipe save.
+  document.addEventListener('visibilitychange', () => {
+    if(document.visibilityState === 'hidden') saveProgress();
+  });
+  window.addEventListener('pagehide', saveProgress);
+  window.addEventListener('beforeunload', saveProgress);
 
   updateHeaderStat();
   checkResumable();
