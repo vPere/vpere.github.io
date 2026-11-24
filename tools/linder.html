@@ -7,16 +7,18 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,500&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<script>(function(){var d=true;try{d=localStorage.getItem("vpere-theme")!=="light"}catch(e){}document.documentElement.setAttribute("data-theme",d?"dark":"light")})();</script>
 <style>
   :root{
-    --bg: #12141a;
-    --bg-alt: #191c24;
-    --surface: #1f232c;
-    --surface-2: #262b36;
-    --border: #2c313d;
-    --text: #ece8dc;
-    --text-muted: #9aa0af;
-    --text-faint: #5b6270;
+    --bg: #0f1419;
+    --bg-alt: #151b23;
+    --surface: #1e2732;
+    --surface-2: #273241;
+    --border: #2a3441;
+    --text: #e6ebf1;
+    --text-muted: #8b9aae;
+    --text-faint: #5a6879;
+    --bg-glow: #17202b;
     --keep: #4f9d69;
     --keep-glow: rgba(79,157,105,0.32);
     --discard: #c1483f;
@@ -25,12 +27,23 @@
     --super-glow: rgba(212,167,60,0.36);
     --radius: 14px;
   }
+  :root[data-theme="light"]{
+    --bg: #ffffff;
+    --bg-alt: #f5f7fa;
+    --surface: #f5f7fa;
+    --surface-2: #e8edf3;
+    --border: #d5dce5;
+    --text: #1c2530;
+    --text-muted: #5f6e80;
+    --text-faint: #8e9bab;
+    --bg-glow: #e8edf3;
+  }
   *{box-sizing:border-box;}
   html,body{height:100%;}
   body{
     margin:0;
     background:
-      radial-gradient(1200px 600px at 50% -10%, #1a1e28 0%, var(--bg) 55%);
+      radial-gradient(1200px 600px at 50% -10%, var(--bg-glow) 0%, var(--bg) 55%);
     color:var(--text);
     font-family:'Inter', system-ui, sans-serif;
     min-height:100dvh;

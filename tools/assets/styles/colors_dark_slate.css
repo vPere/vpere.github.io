@@ -1,0 +1,51 @@
+/* ═══════════════════════════════════════════
+   Slate & Coral palette — dark (tools)
+   Mirrors ../../assets/styles/colors_dark_slate.css
+   ═══════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:wght@300;400;500&family=Geologica:wght@300;400&display=swap');
+
+:root {
+  /* ── Backgrounds ── */
+  --bg:           #0f1419;
+  --bg-surface:   #151b23;
+  --bg-raised:    #1e2732;
+  --bg-elevated:  #273241;
+
+  /* ── Borders ── */
+  --border:       #2a3441;
+  --border-2:     #3a4859;
+  --border-hover: rgba(110,160,232,0.45);
+
+  /* ── Text ── */
+  --text:         #e6ebf1;
+  --text-muted:   #8b9aae;
+  --text-faint:   #5a6879;
+
+  /* ── Primary accent ── */
+  --primary:      #6ea0e8;
+  --primary-dim:  #4a7fc9;
+  --primary-bg:   rgba(110,160,232,0.08);
+  --primary-bg-2: rgba(110,160,232,0.15);
+  --primary-glow: rgba(110,160,232,0.35);
+
+  /* ── Secondary accent ── */
+  --secondary:    #a9c1e3;
+  --accent:       #f08a70;
+  --accent-dim:   rgba(240,138,112,0.15);
+
+  /* ── Status colours ── */
+  --green:        #6dbd8e;
+  --amber:        #e8b84a;
+  --red:          #f07878;
+  --blue:         #7ab4f5;
+
+  /* ── Typography ── */
+  --font-sans:    'DM Sans', sans-serif;
+  --font-mono:    'DM Mono', monospace;
+  --font-display: 'Geologica', sans-serif;
+
+  /* ── Shape ── */
+  --radius:       6px;
+  --radius-lg:    10px;
+}

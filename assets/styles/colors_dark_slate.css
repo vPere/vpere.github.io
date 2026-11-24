@@ -1,0 +1,35 @@
+/* ═══════════════════════════════════════════
+   slate palette — dark
+   ═══════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Geologica:wght@300;400&display=swap');
+
+:root {
+  /* ── Backgrounds ── */
+  --bg:           #0f1419;
+  --bg-surface:   #151b23;
+  --bg-raised:    #1e2732;
+
+  /* ── Borders ── */
+  --border:       #2a3441;
+  --border-hover: rgba(110,160,232,0.40);
+
+  /* ── Text ── */
+  --text:         #e6ebf1;
+  --text-muted:   #8b9aae;
+
+  /* ── Accent colours ── */
+  --primary:      #6ea0e8;
+  --secondary:    #3d5f94;
+  --accent:       #f08a70;
+
+  /* ── Navbar / shadow (dark-specific) ── */
+  --navbar-bg:    rgba(15,20,25,0.85);
+  --shadow-primary: rgba(110,160,232,0.18);
+
+  /* ── Typography ── */
+  --font:         'Geologica', sans-serif;
+
+  /* ── Shape ── */
+  --radius:       12px;
+}

@@ -1,0 +1,35 @@
+/* ═══════════════════════════════════════════
+   teal palette — dark
+   ═══════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Geologica:wght@300;400&display=swap');
+
+:root {
+  /* ── Backgrounds ── */
+  --bg:           #101514;
+  --bg-surface:   #161d1c;
+  --bg-raised:    #1f2928;
+
+  /* ── Borders ── */
+  --border:       #2c3938;
+  --border-hover: rgba(45,212,191,0.40);
+
+  /* ── Text ── */
+  --text:         #e7eeec;
+  --text-muted:   #8fa09c;
+
+  /* ── Accent colours ── */
+  --primary:      #2dd4bf;
+  --secondary:    #14675f;
+  --accent:       #f0a655;
+
+  /* ── Navbar / shadow (dark-specific) ── */
+  --navbar-bg:    rgba(16,21,20,0.85);
+  --shadow-primary: rgba(45,212,191,0.18);
+
+  /* ── Typography ── */
+  --font:         'Geologica', sans-serif;
+
+  /* ── Shape ── */
+  --radius:       12px;
+}

@@ -1,0 +1,33 @@
+/* ═══════════════════════════════════════════
+   slate palette — light
+   ═══════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Geologica:wght@300;400&display=swap');
+
+:root {
+  /* ── Backgrounds ── */
+  --bg:           #ffffff;
+  --bg-surface:   #f5f7fa;
+  --bg-raised:    #e8edf3;
+
+  /* ── Borders ── */
+  --border:       #d5dce5;
+  --border-hover: rgba(47,93,158,0.40);
+
+  /* ── Text ── */
+  --text:         #1c2530;
+  --text-muted:   #5f6e80;
+
+  /* ── Accent colours ── */
+  --primary:      #2f5d9e;
+  --secondary:    #a9c1e3;
+  --accent:       #e4694f;
+
+  --shadow-primary: rgba(47,93,158,0.12);
+
+  /* ── Typography ── */
+  --font:         'Geologica', sans-serif;
+
+  /* ── Shape ── */
+  --radius:       12px;
+}
