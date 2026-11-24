@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/styles/gallery.css">
   <link id="theme-link" rel="stylesheet" href="./assets/styles/colors_dark_slate.css">
   <link rel="stylesheet" href="./assets/styles/styles.css">
 </head>
@@ -19,7 +20,8 @@
     <div class="navbar-inner">
       <a class="nav-link" href="#research" data-i18n="nav.research"></a>
       <a class="nav-link" href="#experience" data-i18n="nav.experience"></a>
-      <a class="nav-link" href="#photo"      data-i18n="nav.photo"></a>
+      <a class="nav-link" href="#gallery"    data-i18n="nav.photo"></a>
+      <a class="nav-link" href="#rally"      data-i18n="nav.rally"></a>
       <div class="nav-dropdown">
         <button class="nav-dropdown-toggle" data-i18n="nav.tools">Tools</button>
         <div class="nav-dropdown-menu">
@@ -48,7 +50,8 @@
   <div class="mobile-nav" id="mobileNav">
     <a class="nav-link" href="#research" data-i18n="nav.research"></a>
     <a class="nav-link" href="#experience" data-i18n="nav.experience"></a>
-    <a class="nav-link" href="#photo"      data-i18n="nav.photo"></a>
+    <a class="nav-link" href="#gallery"    data-i18n="nav.photo"></a>
+    <a class="nav-link" href="#rally"      data-i18n="nav.rally"></a>
     <div class="nav-dropdown">
       <button class="nav-dropdown-toggle" data-i18n="nav.tools">Tools</button>
       <div class="nav-dropdown-menu">
@@ -166,45 +169,84 @@
   </div>
 
   <!-- ── Photo Gallery ─────────────────────────────────────── -->
-    <div class="section" id="photo">
-        <div class="section-container" style="max-width: 960px;">
-          <h2 class="section-title" data-i18n="section.photo.title">Photo Gallery</h2>
-            <div class="ig-grid">
-
-              <div class="ig-card">
-                <blockquote class="instagram-media"
-                  data-instgrm-permalink="https://www.instagram.com/p/DXZOzzpirJq/?utm_source=ig_embed&amp;utm_campaign=loading"
-                  data-instgrm-version="14"
-                  style="background:#111;border:0;margin:0;padding:0;width:100%;">
-                </blockquote>
-              </div>
-            
-              <div class="ig-card">
-                <blockquote class="instagram-media"
-                  data-instgrm-permalink="https://www.instagram.com/p/DSAT5omjFdy/?utm_source=ig_embed&amp;utm_campaign=loading"
-                  data-instgrm-version="14"
-                  style="background:#111;border:0;margin:0;padding:0;width:100%;">
-                </blockquote>
-              </div>
-            
-              <div class="ig-card">
-                <blockquote class="instagram-media"
-                  data-instgrm-permalink="https://www.instagram.com/p/DRwjksQDKLG/?utm_source=ig_embed&amp;utm_campaign=loading"
-                  data-instgrm-version="14"
-                  style="background:#111;border:0;margin:0;padding:0;width:100%;">
-                </blockquote>
-              </div>
-
-              <div class="ig-card">
-                <blockquote class="instagram-media"
-                  data-instgrm-permalink="https://www.instagram.com/p/DXBjZ-xioj9/?utm_source=ig_embed&amp;utm_campaign=loading"
-                  data-instgrm-version="14"
-                  style="background:#111;border:0;margin:0;padding:0;width:100%;">
-                </blockquote>
-              </div>
-            </div>
-        </div>
+  <div class="section" id="gallery">
+    <div class="section-container" style="max-width: 1100px;">
+      <h2 class="section-title" data-i18n="section.gallery.title">Photography</h2>
+      <p class="section-intro">
+        <span data-i18n="section.gallery.intro">A selection of my photography. More on Instagram:</span>
+        <a href="https://www.instagram.com/perevidiella" target="_blank" rel="noopener">@perevidiella</a>
+      </p>
+      <div class="gallery-grid">
+        <a class="gallery-item" href="assets/images/gallery/sagrada-familia.jpg" data-lightbox style="--ar:0.667">
+          <img src="assets/images/gallery/sagrada-familia.jpg" alt="Sagrada Família ceiling" width="1067" height="1600" loading="lazy">
+        </a>
+        <a class="gallery-item" href="assets/images/gallery/rally-volvo.jpg" data-lightbox style="--ar:0.667">
+          <img src="assets/images/gallery/rally-volvo.jpg" alt="Blue Volvo sliding on a gravel stage" width="1067" height="1600" loading="lazy">
+        </a>
+        <a class="gallery-item" href="assets/images/gallery/morocco-village.jpg" data-lightbox style="--ar:0.667">
+          <img src="assets/images/gallery/morocco-village.jpg" alt="Village in the Moroccan desert" width="1067" height="1600" loading="lazy">
+        </a>
+        <a class="gallery-item" href="assets/images/gallery/rock.jpg" data-lightbox style="--ar:0.667">
+          <img src="assets/images/gallery/rock.jpg" alt="Rock formation in the mountains" width="1067" height="1600" loading="lazy">
+        </a>
+        <a class="gallery-item" href="assets/images/gallery/golf-desert.jpg" data-lightbox style="--ar:1.500">
+          <img src="assets/images/gallery/golf-desert.jpg" alt="VW Golf crossing the desert" width="1600" height="1067" loading="lazy">
+        </a>
+        <a class="gallery-item" href="assets/images/gallery/golf-sand.jpg" data-lightbox style="--ar:0.667">
+          <img src="assets/images/gallery/golf-sand.jpg" alt="VW Golf in the sand" width="1067" height="1600" loading="lazy">
+        </a>
+        <a class="gallery-item" href="assets/images/gallery/ground-squirrel.jpg" data-lightbox style="--ar:0.667">
+          <img src="assets/images/gallery/ground-squirrel.jpg" alt="Barbary ground squirrel on a rock" width="1067" height="1600" loading="lazy">
+        </a>
+        <a class="gallery-item" href="assets/images/gallery/statue.jpg" data-lightbox style="--ar:0.667">
+          <img src="assets/images/gallery/statue.jpg" alt="Statue against a blue sky" width="1067" height="1600" loading="lazy">
+        </a>
+        <a class="gallery-item" href="assets/images/gallery/eclipse-sunset.jpg" data-lightbox style="--ar:1.500">
+          <img src="assets/images/gallery/eclipse-sunset.jpg" alt="Solar eclipse over a village at sunset" width="1600" height="1067" loading="lazy">
+        </a>
+        <a class="gallery-item" href="assets/images/gallery/milky-way.jpg" data-lightbox style="--ar:1.500">
+          <img src="assets/images/gallery/milky-way.jpg" alt="Milky Way" width="1600" height="1067" loading="lazy">
+        </a>
+        <a class="gallery-item" href="assets/images/gallery/renault-5.jpg" data-lightbox style="--ar:1.500">
+          <img src="assets/images/gallery/renault-5.jpg" alt="Renault 5 GT Turbo on the road" width="1600" height="1067" loading="lazy">
+        </a>
+        <a class="gallery-item" href="assets/images/gallery/climbers.jpg" data-lightbox style="--ar:1.500">
+          <img src="assets/images/gallery/climbers.jpg" alt="Window cleaners on a glass facade" width="1600" height="1067" loading="lazy">
+        </a>
+        <a class="gallery-item" href="assets/images/gallery/golf-arch.jpg" data-lightbox style="--ar:0.667">
+          <img src="assets/images/gallery/golf-arch.jpg" alt="VW Golf framed by an arch" width="1067" height="1600" loading="lazy">
+        </a>
+        <a class="gallery-item" href="assets/images/gallery/sunset-silhouettes.jpg" data-lightbox style="--ar:1.778">
+          <img src="assets/images/gallery/sunset-silhouettes.jpg" alt="Silhouettes of people against the setting sun" width="1600" height="900" loading="lazy">
+        </a>
+        <a class="gallery-item" href="assets/images/gallery/berlin-tower.jpg" data-lightbox style="--ar:0.667">
+          <img src="assets/images/gallery/berlin-tower.jpg" alt="Berlin TV Tower in autumn" width="1067" height="1600" loading="lazy">
+        </a>
+      </div>
+      <figure class="gallery-feature">
+        <a class="gallery-item" href="assets/images/gallery/pvw-cover.jpg" data-lightbox><img src="assets/images/gallery/pvw-cover.jpg" alt="Performance VW magazine cover, July 2026: Overland!" width="1104" height="1550" loading="lazy"></a>
+        <figcaption data-i18n="section.rally.magazine"></figcaption>
+      </figure>
     </div>
+  </div>
+
+  <!-- ── Rally ─────────────────────────────────────────────── -->
+  <div class="section" id="rally">
+    <div class="section-container" style="max-width: 1100px;">
+      <h2 class="section-title" data-i18n="section.rally.title">Rally</h2>
+      <div class="rally-text">
+        <p data-i18n="section.rally.p1"></p>
+        <p data-i18n="section.rally.p2"></p>
+      </div>
+      <div class="rally-gallery">
+        <a class="gallery-item rally-wide" href="assets/images/rally/regularity-podium.jpg" data-lightbox><img src="assets/images/rally/regularity-podium.jpg" alt="Regularity rally car at the podium" width="1600" height="1066" loading="lazy"></a>
+        <a class="gallery-item" href="assets/images/rally/regularity-circuit.jpg" data-lightbox><img src="assets/images/rally/regularity-circuit.jpg" alt="Renault 5 on a circuit during a regularity rally" width="1600" height="1067" loading="lazy"></a>
+        <a class="gallery-item" href="assets/images/rally/vwgc-golf.jpg" data-lightbox><img src="assets/images/rally/vwgc-golf.jpg" alt="VW Golf at the Volkswagen Golf Challenge" width="1600" height="1067" loading="lazy"></a>
+        <a class="gallery-item" href="assets/images/rally/vwgc-finish.jpg" data-lightbox><img src="assets/images/rally/vwgc-finish.jpg" alt="Volkswagen Golf Challenge finish arch" width="1600" height="1067" loading="lazy"></a>
+        <a class="gallery-item" href="assets/images/rally/vwgc-dune.jpg" data-lightbox><img src="assets/images/rally/vwgc-dune.jpg" alt="VW Golf on a sand dune" width="1600" height="900" loading="lazy"></a>
+      </div>
+    </div>
+  </div>
 
    <!-- ── Footer ────────────────────────────────────────────── -->
   <footer>
@@ -213,9 +255,9 @@
  
   <script src="https://cdn.jsdelivr.net/npm/i18next@21.7.1/dist/umd/i18next.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/i18next-http-backend@1.4.5/i18nextHttpBackend.min.js"></script>
-  <script async src="https://www.instagram.com/embed.js"></script>
   <script src="./assets/js/i18n-loader.js"></script> 
   <script src="./assets/js/main.js"></script>
+  <script src="./assets/js/lightbox.js"></script>
  
 </body>
 </html>

@@ -255,44 +255,7 @@ a {
   color: var(--secondary);
 }
 
-#experience { background-color: var(--bg-surface); }
-
-.ig-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto auto;
-  gap: 12px;
-  max-width: 960px;
-  margin: 0 auto;
-}
-.ig-card {
-  border-radius: var(--radius);
-  overflow: hidden;
-  border: 1px solid var(--border);
-  background: var(--bg-raised);
-  transition: border-color 0.2s ease, transform 0.2s ease,
-              box-shadow 0.2s ease;
-}
-.ig-card:hover {
-  border-color: var(--border-hover);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px var(--shadow-primary, rgba(113,115,241,0.12));
-}
-.ig-card--featured { grid-row: span 2; }
-
-.ig-card .instagram-media {
-  width: 100% !important;
-  min-width: 0 !important;
-  max-width: 100% !important;
-  margin: 0 !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-}
-
-@media (max-width: 640px) {
-  .ig-grid { grid-template-columns: 1fr; }
-  .ig-card--featured { grid-row: span 1; }
-}
+#experience, #rally { background-color: var(--bg-surface); }
 
 /* --- Footer ----------------------------------------------- */
 footer {
