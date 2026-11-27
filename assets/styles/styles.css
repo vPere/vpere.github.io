@@ -222,6 +222,11 @@ a {
 }
 .section-item:first-child { border-top: 1px solid var(--border); }
 .section-item:hover { padding-left: 0.75rem; }
+.section-item.about-item,
+.section-item.about-item:first-child { border: none; }
+.section-item.about-item:hover { padding-left: 0; }
+.about-section { padding-top: 48px; padding-bottom: 0; }
+.section-item.about-item { padding: 0; display: block; text-align: center; }
 
 .job-title {
   grid-area: title;
